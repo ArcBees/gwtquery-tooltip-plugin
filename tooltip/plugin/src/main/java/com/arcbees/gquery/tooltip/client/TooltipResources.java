@@ -22,6 +22,6 @@ public interface TooltipResources extends ClientBundle{
 
     }
 
-    @Source("com/zafinlabs/zui/zuicore/client/ui/Tooltip.css")
+    @Source("Tooltip.css")
     TooltipStyle css();
 }
