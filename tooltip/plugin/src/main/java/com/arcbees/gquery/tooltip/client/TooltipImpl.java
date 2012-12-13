@@ -67,7 +67,6 @@ public class TooltipImpl {
             try{
                 return Integer.parseInt(s);
             }catch(NumberFormatException e){
-                GWT.log("Impossible to convert the string'"+s+"' to an integer.");
                 return null;
             }
         }
@@ -84,7 +83,6 @@ public class TooltipImpl {
         public T convert(String s) {
             return Enum.valueOf(enumClass,s.toUpperCase());
         }
-
     }
 
     private static final String TITLE_ATTRIBUTE = "title";
@@ -114,7 +112,6 @@ public class TooltipImpl {
 
         impl.setTimer(timer);
         timer.schedule(impl.options.getDelayShow());
-
     }
 
     private static TooltipImpl getImpl(Element e, TooltipOptions initOption) {
