@@ -1,2 +1,1 @@
-ArcBees-GQuery-Plugins
-======================
+#ArcBees GQuery Plugins
