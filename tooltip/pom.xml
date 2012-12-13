@@ -13,4 +13,14 @@
     <packaging>pom</packaging>
     <name>Tooltip plugin project</name>
 
+    <build>
+        <extensions>
+            <extension>
+                <groupId>org.jvnet.wagon-svn</groupId>
+                <artifactId>wagon-svn</artifactId>
+                <version>1.8</version>
+            </extension>
+        </extensions>
+    </build>
+
 </project>

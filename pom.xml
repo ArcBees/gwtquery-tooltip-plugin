@@ -74,16 +74,6 @@
         </dependency>
     </dependencies>
 
-    <build>
-        <extensions>
-            <extension>
-                <groupId>org.jvnet.wagon-svn</groupId>
-                <artifactId>wagon-svn</artifactId>
-                <version>1.8</version>
-            </extension>
-        </extensions>
-    </build>
-
     <distributionManagement>
         <repository>
             <id>sona-nexus-deploy</id> <!-- Add to settings.xml <server><id>sona-nexus-deploy</id> -->
