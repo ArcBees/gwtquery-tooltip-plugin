@@ -44,6 +44,7 @@
         <plugins>
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.12.4</version>
                 <configuration>
                     <additionalClasspathElements>
                         <additionalClasspathElement>\${project.build.sourceDirectory}</additionalClasspathElement>
@@ -61,7 +62,6 @@
                     </systemProperties>
                 </configuration>
             </plugin>
-
             <plugin>
                 <groupId>org.riedelcastro</groupId>
                 <artifactId>gcupload-maven-plugin</artifactId>
@@ -88,6 +88,7 @@
 
             <plugin>
                 <artifactId>maven-clean-plugin</artifactId>
+                <version>2.5</version>
                 <configuration>
                     <filesets>
                         <fileset>
