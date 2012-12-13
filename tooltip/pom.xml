@@ -12,6 +12,10 @@
     <artifactId>tooltip</artifactId>
     <packaging>pom</packaging>
     <name>Tooltip plugin project</name>
+    
+    <modules>
+        <module>plugin</module>
+    </modules>
 
     <build>
         <extensions>
