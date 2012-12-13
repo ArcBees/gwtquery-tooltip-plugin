@@ -1,5 +1,6 @@
 package com.arcbees.gquery.tooltip.client;
 
+import com.arcbees.gquery.tooltip.client.TooltipOptions.TooltipPlacement;
 import com.arcbees.gquery.tooltip.client.TooltipOptions.TooltipTrigger;
 import com.arcbees.gquery.tooltip.client.TooltipResources.TooltipStyle;
 import com.google.gwt.core.client.GWT;
@@ -13,11 +14,11 @@ import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Timer;
 
+import static com.arcbees.gquery.tooltip.client.Tooltip.Tooltip;
 import static com.google.gwt.query.client.GQuery.$;
 import static com.arcbees.gquery.tooltip.client.Tooltip.TOOLTIP_DATA_KEY;
 
 public class TooltipImpl {
-
     public static interface DefaultTemplate extends SafeHtmlTemplates {
         public DefaultTemplate template = GWT.create(DefaultTemplate.class);
 
@@ -41,15 +42,60 @@ public class TooltipImpl {
         private long top;
         private long width;
     }
+
+    private static interface Converter<T>{
+        T convert(String s);
+    }
+
+    private static class StringConverter implements Converter<String>{
+        @Override
+        public String convert(String s) {
+            return s;
+        }
+    }
+
+    private static class BooleanConverter implements Converter<Boolean>{
+        @Override
+        public Boolean convert(String s) {
+            return Boolean.parseBoolean(s);
+        }
+    }
+
+    private static class IntegerConverter implements Converter<Integer>{
+        @Override
+        public Integer convert(String s) {
+            try{
+                return Integer.parseInt(s);
+            }catch(NumberFormatException e){
+                GWT.log("Impossible to convert the string'"+s+"' to an integer.");
+                return null;
+            }
+        }
+    }
+
+    private static class EnumConverter<T extends Enum<T>> implements Converter<T>{
+        private Class<T> enumClass;
+
+        private EnumConverter(Class<T> enumClass) {
+            this.enumClass = enumClass;
+        }
+
+        @Override
+        public T convert(String s) {
+            return Enum.valueOf(enumClass,s.toUpperCase());
+        }
+
+    }
+
     private static final String TITLE_ATTRIBUTE = "title";
     private static final String DATA_TITLE_ATTRIBUTE = "data-original-title";
     private static final int ANIMATION_DURATION = 150;
 
-    private static void enter(Event e, TooltipOptions options) {
-        Element target = e.getEventTarget().cast();
-        final TooltipImpl impl = getImpl(target, options);
+    private static void enter(Event e, TooltipOptions delegateOptions) {
+        Element target = e.getCurrentEventTarget().cast();
+        final TooltipImpl impl = getImpl(target, delegateOptions);
 
-        if (impl.options.getDelay() == 0) {
+        if (impl.options.getDelayShow() == 0) {
             impl.show();
             return;
         }
@@ -67,26 +113,27 @@ public class TooltipImpl {
         };
 
         impl.setTimer(timer);
-        timer.schedule(options.getDelay());
+        timer.schedule(impl.options.getDelayShow());
 
     }
 
     private static TooltipImpl getImpl(Element e, TooltipOptions initOption) {
         //ensure that a tooltip was initialized for the element (in case of delegation) and get the implementation
-        return $(e).as(Tooltip.Tooltip).tooltip(initOption).data(TOOLTIP_DATA_KEY,
+        return $(e).as(Tooltip).tooltip(initOption).data(TOOLTIP_DATA_KEY,
                 TooltipImpl.class);
     }
 
-    private static void leave(Event e, TooltipOptions options) {
-        Element target = e.getEventTarget().cast();
-        final TooltipImpl impl = getImpl(target, options);
+    private static void leave(Event e, TooltipOptions delegateOptions) {
+        Element target = e.getCurrentEventTarget().cast();
+        final TooltipImpl impl = getImpl(target, delegateOptions);
 
-        if (impl.options.getDelay() == 0) {
+        impl.cancelTimer();
+
+        if (impl.options.getDelayHide() == 0) {
             impl.hide();
             return;
         }
 
-        impl.cancelTimer();
         impl.setHover(false);
 
         Timer timer = new Timer() {
@@ -99,11 +146,11 @@ public class TooltipImpl {
         };
 
         impl.setTimer(timer);
-        timer.schedule(options.getDelay());
+        timer.schedule(impl.options.getDelayHide());
     }
 
     private static void toggle(Event e, TooltipOptions options) {
-        Element target = e.getEventTarget().cast();
+        Element target = e.getCurrentEventTarget().cast();
         TooltipImpl impl = getImpl(target, options);
 
         impl.toggle();
@@ -120,7 +167,7 @@ public class TooltipImpl {
 
     public TooltipImpl(Element element, TooltipOptions options, TooltipResources resources) {
         this.$element = $(element);
-        this.options = options;
+        this.options = getOptions(options);
         this.style = resources.css();
 
         init();
@@ -137,6 +184,30 @@ public class TooltipImpl {
 
     public void enable() {
         enabled = true;
+    }
+
+    public TooltipOptions getOptions(TooltipOptions initialOptions){
+        TooltipOptions options;
+        if (initialOptions == null){
+            options = new TooltipOptions(false);
+        }else{
+            //make a fresh copy to not impact other tooltips if the element overrides some options with its attributes
+            options = new TooltipOptions(initialOptions);
+        }
+
+        //read data-* attributes on element
+        options.withHtml(readDataAttributes("animation", options.isAnimation(), new BooleanConverter()));
+        options.withDelayHide(readDataAttributes("delayHide", options.getDelayHide(), new IntegerConverter()));
+        options.withDelayShow(readDataAttributes("delayShow", options.getDelayShow(), new IntegerConverter()));
+        options.withHtml(readDataAttributes("html", options.isHtml(), new BooleanConverter()));
+        options.withPlacement(readDataAttributes("placement", options.getPlacement(),
+                new EnumConverter<TooltipPlacement>(TooltipPlacement.class)));
+        options.withTrigger(readDataAttributes("trigger", options.getTrigger(), new EnumConverter<TooltipTrigger>
+                (TooltipTrigger.class)));
+        options.withSelector(readDataAttributes("selector", options.getSelector(), new StringConverter()));
+
+        return options;
+
     }
 
     public void hide() {
@@ -168,7 +239,7 @@ public class TooltipImpl {
         setContent(title);
 
         tooltip.detach()
-                .removeClass("fade", "in", "top", "bottom", "left", "right")
+                .removeClass("in", "top", "bottom", "left", "right")
                 .css("top", "0")
                 .css("left", "0")
                 .css("display", "block")
@@ -313,6 +384,18 @@ public class TooltipImpl {
 
     private boolean isHover() {
         return this.hover;
+    }
+
+    private <T> T readDataAttributes(String name, T defaultData, Converter<T> converter){
+        //TODO $.data() should be able to read html5 data-* attributes
+        String value = $element.attr("data-tooltip-"+name);
+        if (value == null || value.length() == 0){
+            return defaultData;
+        }
+
+        T result = converter.convert(value);
+
+        return result != null ? result : defaultData;
     }
 
     private void setContent(String title) {

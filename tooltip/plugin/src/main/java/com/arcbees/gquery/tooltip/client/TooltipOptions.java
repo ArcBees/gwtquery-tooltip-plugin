@@ -11,9 +11,11 @@ public class TooltipOptions {
     public enum TooltipTrigger {
         CLICK, HOVER, FOCUS, MANUAL;
     }
+
     private boolean animation;
     private String content;
-    private int delay;
+    private int delayShow;
+    private int delayHide;
     private boolean html;
     private TooltipPlacement placement;
     private TooltipResources resources;
@@ -22,10 +24,16 @@ public class TooltipOptions {
     private TooltipTrigger trigger;
 
     public TooltipOptions() {
-        initDefault();
+        this(true);
     }
 
-    public TooltipOptions(TooltipOptions options) {
+    TooltipOptions(boolean initDefault){
+        if (initDefault){
+            initDefault();
+        }
+    }
+
+    TooltipOptions(TooltipOptions options) {
         if (options != null) {
             animation = options.isAnimation();
             html = options.isHtml();
@@ -33,7 +41,8 @@ public class TooltipOptions {
             selector = options.getSelector();
             content = options.getContent();
             trigger = options.getTrigger();
-            delay = options.getDelay();
+            delayShow= options.getDelayShow();
+            delayHide = options.getDelayHide();
             resources = options.getResources();
         }
     }
@@ -42,8 +51,12 @@ public class TooltipOptions {
         return content;
     }
 
-    public int getDelay() {
-        return delay;
+    public int getDelayHide() {
+        return delayHide;
+    }
+
+    public int getDelayShow() {
+        return delayShow;
     }
 
     public TooltipPlacement getPlacement() {
@@ -115,7 +128,27 @@ public class TooltipOptions {
      * @param delay
      */
     public TooltipOptions withDelay(int delay) {
-        this.delay = delay;
+        this.delayShow = this.delayHide = delay;
+        return this;
+    }
+
+    /**
+     * delay hiding the tooltip (ms)
+     *
+     * @param delay
+     */
+    public TooltipOptions withDelayHide(int delay) {
+        this.delayHide = delay;
+        return this;
+    }
+
+    /**
+     * delay showing the tooltip (ms)
+     *
+     * @param delay
+     */
+    public TooltipOptions withDelayShow(int delay) {
+        this.delayShow = delay;
         return this;
     }
 
@@ -161,7 +194,7 @@ public class TooltipOptions {
     /**
      * Content of the tooltip, if <code>title</code> attribute doesn't exist on the element
      *
-     * @param content
+     * @param template
      */
     public TooltipOptions withTemplate(SafeHtml template) {
         this.template = template;
@@ -183,6 +216,6 @@ public class TooltipOptions {
         html = false;
         placement = TooltipPlacement.TOP;
         trigger = TooltipTrigger.HOVER;
-        delay = 0;
+        delayShow = delayHide = 0;
     }
 }
