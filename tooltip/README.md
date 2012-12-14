@@ -1,5 +1,4 @@
-
-
+#GQuery Plugin Tooltip
 This is the plugin Tooltip for GwtQuery Library.
 
 - Assuming you have installed maven, compile and install it just running:
