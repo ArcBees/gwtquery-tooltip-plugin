@@ -1,6 +1,24 @@
 #GQuery Plugin Tooltip
 This is the plugin Tooltip for GwtQuery Library.
 
+##Maven Use
+Use our snapshots repository until we release
+
+```
+<repositories>
+    <repository>
+        <id>sonatype.snapshots</id>
+        <name>Sonatype snapshot repository</name>
+        <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+        <snapshots>
+            <enabled>true</enabled>
+        </snapshots>
+    </repository>
+</repositories>
+```
+
+##Manual Maven Instructions
+
 - Assuming you have installed maven, compile and install it just running:
 $ mvn clean install
 
