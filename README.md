@@ -1,6 +1,6 @@
 #ArcBees GQuery Plugins
 
-##Index
+##Plugins
 <table>
   <tr>
     <th>Plugin</th>
