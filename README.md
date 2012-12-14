@@ -6,7 +6,7 @@
     <th>Plugin</th>
   </tr>
   <tr>
-    <td>[Tooltip](https://github.com/ArcBees/ArcBees-GQuery-Plugins/tree/master/tooltip)</td>
+    <td><a href="https://github.com/ArcBees/ArcBees-GQuery-Plugins/tree/master/tooltip">Tooltip</a></td>
   </tr>
 </table>
 
@@ -25,3 +25,6 @@ Use our snapshots repository until we release
     </repository>
 </repositories>
 ```
+
+##Thanks to
+[![IntelliJ](https://lh6.googleusercontent.com/--QIIJfKrjSk/UJJ6X-UohII/AAAAAAAAAVM/cOW7EjnH778/s800/banner_IDEA.png)](http://www.jetbrains.com/idea/index.html)
