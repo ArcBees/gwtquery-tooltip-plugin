@@ -24,7 +24,16 @@ Use our snapshots repository until we release
         </snapshots>
     </repository>
 </repositories>
+
+<dependency>
+    <groupId>com.arcbees.gquery</groupId>
+    <artifactId>gquery</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+</dependency>
 ```
+
+##Current Release
+0.0.1-SNAPSHOT
 
 ##Thanks to
 [![IntelliJ](https://lh6.googleusercontent.com/--QIIJfKrjSk/UJJ6X-UohII/AAAAAAAAAVM/cOW7EjnH778/s800/banner_IDEA.png)](http://www.jetbrains.com/idea/index.html)

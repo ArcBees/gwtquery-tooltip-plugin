@@ -15,6 +15,12 @@ Use our snapshots repository until we release
         </snapshots>
     </repository>
 </repositories>
+
+<dependency>
+    <groupId>com.arcbees.gquery</groupId>
+    <artifactId>tooltip</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+</dependency>
 ```
 
 ##Manual Maven Instructions
