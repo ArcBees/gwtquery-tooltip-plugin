@@ -1,55 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    
-    <name>Tooltip plugin project</name>
-    <groupId>com.arcbees.gquery</groupId>
+
+    <parent>
+        <groupId>com.arcbees.gquery</groupId>
+        <artifactId>gquery-plugins</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+
+    <name>Tooltip plugin for gQuery</name>
     <artifactId>tooltip</artifactId>
-    <packaging>pom</packaging>
-    <version>0.0.1</version>
-
-    <properties>
-      <maven.compiler.source>1.6</maven.compiler.source>
-      <maven.compiler.target>1.6</maven.compiler.target>
-      <gQueryVersion>1.2.0</gQueryVersion>
-      <gwtversion>2.5.0</gwtversion>
-    </properties>
-
-    <repositories>
-       <repository>
-         <id>central</id>
-         <url>http://repo1.maven.org/maven2</url>
-       </repository>
-       <repository>
-         <id>site</id>
-         <url>http://gwtquery.googlecode.com/svn/mavenrepo</url>
-       </repository>
-       <repository>
-         <id>m.g.o</id>
-         <url>http://maven.glassfish.org/content/groups/public/</url>
-       </repository>
-    </repositories>
-
-    <pluginRepositories>
-        <pluginRepository>
-            <id>gcupload</id>
-            <name>Repository for gcupload plugin</name>
-            <url>http://gwtupload.googlecode.com/svn/mavenrepo</url>
-        </pluginRepository>
-    </pluginRepositories>
-
-    <scm>
-        <connection>scm:svn:http://gwtquery-plugins.googlecode.com/svn/trunk/tooltip
-        </connection>
-        <developerConnection>scm:svn:https://gwtquery-plugins.googlecode.com/svn/trunk/tooltip
-        </developerConnection>
-        <url>http://code.google.com/p/gwtquery-plugins/source/browse/trunk/tooltip</url>
-    </scm>
-
-    <issueManagement>
-        <system>Google Code</system>
-        <url>http://code.google.com/p/gwtquery-plugins/issues/list</url>
-    </issueManagement>
+    <packaging>jar</packaging>
 
     <dependencies>
         <dependency>
@@ -59,38 +21,115 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>com.google.gwt</groupId>
+            <artifactId>gwt-user</artifactId>
+            <version>${gwt.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.google.gwt</groupId>
+            <artifactId>gwt-dev</artifactId>
+            <version>${gwt.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>com.googlecode.gwtquery</groupId>
             <artifactId>gwtquery</artifactId>
-            <version>${gQueryVersion}</version>
             <scope>provided</scope>
+            <version>${gQueryVersion}</version>
         </dependency>
     </dependencies>
 
     <build>
-        <extensions>
-            <extension>
-                <groupId>org.jvnet.wagon-svn</groupId>
-                <artifactId>wagon-svn</artifactId>
-                <version>1.8</version>
-            </extension>
-        </extensions>
+        <resources>
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*.java</include>
+                    <include>**/*.gwt.xml</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+        </resources>
+
+        <plugins>
+            <!-- JUnit Testing -->
+            <!-- run 'mvn test' for running JUnit Tests -->
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.6</version>
+                <configuration>
+                    <excludes>
+                        <exclude>**/*GwtTest.java</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+
+            <!-- GWT -->
+            <!-- run 'mvn integration-test' for running the GwtTestSuite -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>gwt-maven-plugin</artifactId>
+                <version>${gwt.maven.version}</version>
+                <configuration>
+                    <extraJvmArgs>-Xss1024k -Xmx512M</extraJvmArgs>
+                    <!-- Far faster to use suite when their are many tests -->
+                    <!-- <includes>**/*GwtTestSuite.java</includes> -->
+                    <!-- <excludes>**/*GwtTest.java</excludes> -->
+                    <includes>**/*GwtTest.java</includes>
+                    <mode>htmlunit</mode>
+                    <testTimeOut>180</testTimeOut>
+
+                    <strict>true</strict>
+                    <style>${gwt.style}</style>
+
+                    <compileSourcesArtifacts>
+                        <compileSourcesArtifact>com.arcbees.gquery.tooltip:Tooltip</compileSourcesArtifact>
+                    </compileSourcesArtifacts>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>test</goal>
+                        </goals>
+                    </execution>
+                </executions>
+
+                <dependencies>
+                    <dependency>
+                        <groupId>com.google.gwt</groupId>
+                        <artifactId>gwt-user</artifactId>
+                        <version>${gwt.version}</version>
+                    </dependency>
+                    <!-- <dependency>
+                        <groupId>com.google.gwt</groupId>
+                        <artifactId>gwt-dev</artifactId>
+                        <version>${gwt.version}</version>
+                    </dependency> -->
+                    <dependency>
+                        <groupId>com.google.gwt</groupId>
+                        <artifactId>gwt-servlet</artifactId>
+                        <version>${gwt.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+
+            <!-- Deploy source code in the repository -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>2.1.2</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
     </build>
-
-    <distributionManagement>
-        <repository>
-          <uniqueVersion>false</uniqueVersion>
-          <id>googlecode</id>
-          <url>svn:https://gwtquery-plugins.googlecode.com/svn/mavenrepo/</url>
-        </repository>
-        <snapshotRepository>
-          <uniqueVersion>false</uniqueVersion>
-          <id>localfolder</id>
-          <url>file:mavenrepo</url>
-        </snapshotRepository>
-    </distributionManagement>
-
-  <modules>
-    <module>plugin</module>
-    <!--module>sample</module-->
-  </modules>
 </project>
