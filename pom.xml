@@ -5,7 +5,7 @@
 
     <name>ArcBees GQuery Plugins</name>
     <groupId>com.arcbees.gquery</groupId>
-    <artifactId>gquery</artifactId>
+    <artifactId>gquery-plugins</artifactId>
     <packaging>pom</packaging>
     <version>0.0.1-SNAPSHOT</version>
 
