@@ -183,30 +183,6 @@ public class TooltipImpl {
         enabled = true;
     }
 
-    public TooltipOptions getOptions(TooltipOptions initialOptions){
-        TooltipOptions options;
-        if (initialOptions == null){
-            options = new TooltipOptions(false);
-        }else{
-            //make a fresh copy to not impact other tooltips if the element overrides some options with its attributes
-            options = new TooltipOptions(initialOptions);
-        }
-
-        //read data-* attributes on element
-        options.withHtml(readDataAttributes("animation", options.isAnimation(), new BooleanConverter()));
-        options.withDelayHide(readDataAttributes("delayHide", options.getDelayHide(), new IntegerConverter()));
-        options.withDelayShow(readDataAttributes("delayShow", options.getDelayShow(), new IntegerConverter()));
-        options.withHtml(readDataAttributes("html", options.isHtml(), new BooleanConverter()));
-        options.withPlacement(readDataAttributes("placement", options.getPlacement(),
-                new EnumConverter<TooltipPlacement>(TooltipPlacement.class)));
-        options.withTrigger(readDataAttributes("trigger", options.getTrigger(), new EnumConverter<TooltipTrigger>
-                (TooltipTrigger.class)));
-        options.withSelector(readDataAttributes("selector", options.getSelector(), new StringConverter()));
-
-        return options;
-
-    }
-
     public void hide() {
         final GQuery tooltip = getTip();
 
@@ -315,6 +291,31 @@ public class TooltipImpl {
         }
     }
 
+    private TooltipOptions getOptions(TooltipOptions initialOptions){
+        TooltipOptions options;
+        if (initialOptions == null){
+            options = new TooltipOptions(false);
+        }else{
+            //make a fresh copy to not impact other tooltips if the element overrides some options with its attributes
+            options = new TooltipOptions(initialOptions);
+        }
+
+        //read data-* attributes on element
+        options.withHtml(readDataAttributes("animation", options.isAnimation(), new BooleanConverter()));
+        options.withDelayHide(readDataAttributes("delayHide", options.getDelayHide(), new IntegerConverter()));
+        options.withDelayShow(readDataAttributes("delayShow", options.getDelayShow(), new IntegerConverter()));
+        options.withHtml(readDataAttributes("html", options.isHtml(), new BooleanConverter()));
+        options.withContent(readDataAttributes("content", options.getContent(), new StringConverter()));
+        options.withPlacement(readDataAttributes("placement", options.getPlacement(),
+                new EnumConverter<TooltipPlacement>(TooltipPlacement.class)));
+        options.withTrigger(readDataAttributes("trigger", options.getTrigger(), new EnumConverter<TooltipTrigger>
+                (TooltipTrigger.class)));
+        options.withSelector(readDataAttributes("selector", options.getSelector(), new StringConverter()));
+
+        return options;
+
+    }
+
     private SafeHtml getTemplate(){
         if (options.getTemplate() != null){
             return options.getTemplate();
@@ -384,8 +385,13 @@ public class TooltipImpl {
     }
 
     private <T> T readDataAttributes(String name, T defaultData, Converter<T> converter){
-        //TODO $.data() should be able to read html5 data-* attributes
-        String value = $element.attr("data-tooltip-"+name);
+        String value = $element.data("tooltip-"+name, String.class);
+
+        if (value == null || value.length() == 0){
+            //TODO $.data() should be able to read html5 data-* attributes
+            value = $element.attr("data-tooltip-"+name);
+        }
+
         if (value == null || value.length() == 0){
             return defaultData;
         }
