@@ -22,6 +22,6 @@ public interface TooltipResources extends ClientBundle{
 
     }
 
-    @Source("Tooltip.css")
+    @Source("com/arcbees/gquery/tooltip/client/Tooltip.css")
     TooltipStyle css();
 }
