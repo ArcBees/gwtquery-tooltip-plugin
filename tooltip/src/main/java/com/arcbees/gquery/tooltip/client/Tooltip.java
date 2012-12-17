@@ -73,6 +73,7 @@ public class Tooltip extends GQuery {
             TooltipImpl impl = getImpl(e);
             if (impl != null) {
                 impl.destroy();
+                $(e).removeData(TOOLTIP_DATA_KEY);
             }
         }
         return this;
