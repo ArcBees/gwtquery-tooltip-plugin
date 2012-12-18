@@ -287,7 +287,8 @@ public class TooltipImpl {
         String title = $element.attr(TITLE_ATTRIBUTE);
 
         if (title != null && title.length() > 0) {
-            $element.attr(DATA_TITLE_ATTRIBUTE, title).removeAttr(TITLE_ATTRIBUTE);
+            $element.attr(DATA_TITLE_ATTRIBUTE, title);
+            $element.get(0).removeAttribute(TITLE_ATTRIBUTE);
         }
     }
 
