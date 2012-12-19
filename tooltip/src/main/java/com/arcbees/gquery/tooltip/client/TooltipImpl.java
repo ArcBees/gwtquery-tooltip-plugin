@@ -171,17 +171,16 @@ public class TooltipImpl {
     private TooltipStyle style;
 
     public TooltipImpl(Element element, TooltipOptions options) {
+       this(element, options, getDefaultResources());
+    }
+
+    public TooltipImpl(Element element, TooltipOptions options, TooltipResources resources) {
         this.$element = $(element);
         this.options = getOptions(options);
-        //Is GWT optimization works here ?
-        if (options.getResources() != null){
-            this.style = options.getResources().css();
-        } else{
-            this.style = getDefaultResources().css();
-        }
-
+        this.style = resources.css();
         init();
     }
+
 
     public void destroy() {
         hide();

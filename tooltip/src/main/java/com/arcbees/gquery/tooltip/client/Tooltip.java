@@ -27,7 +27,13 @@ public class Tooltip extends GQuery {
         for (Element e : elements()) {
             GQuery $e = $(e);
             if ($e.data(TOOLTIP_DATA_KEY) == null) {
-                TooltipImpl impl = new TooltipImpl(e, options);
+                TooltipImpl impl;
+                //use 2 different constructors for GWT optimization purpose
+                if (options.getResources() == null){
+                    impl = new TooltipImpl(e, options);
+                }else{
+                    impl = new TooltipImpl(e, options, options.getResources());
+                }
                 $e.data(TOOLTIP_DATA_KEY, impl);
             }
         }
