@@ -63,7 +63,6 @@ public class TooltipOptions {
         TooltipOptions.globalTrigger = globalTrigger;
     }
 
-
     static {
         //set default options globally
         globalAnimation = true;
@@ -73,7 +72,6 @@ public class TooltipOptions {
         globalDelayShow = globalDelayHide = 0;
 
     }
-
 
     private Boolean animation;
     private String content;
@@ -88,7 +86,6 @@ public class TooltipOptions {
 
     public TooltipOptions() {
     }
-
 
     TooltipOptions(TooltipOptions options) {
         if (options != null) {
@@ -267,5 +264,4 @@ public class TooltipOptions {
         this.trigger = trigger;
         return this;
     }
-
 }
