@@ -12,11 +12,72 @@ public class TooltipOptions {
         CLICK, HOVER, FOCUS, MANUAL;
     }
 
-    private boolean animation;
+    private static boolean globalAnimation;
+    private static String globalContent;
+    private static int globalDelayShow;
+    private static int globalDelayHide;
+    private static boolean globalHtml;
+    private static TooltipPlacement globalPlacement;
+    private static TooltipResources globalResources;
+    private static String globalSelector;
+    private static SafeHtml globalTemplate;
+    private static TooltipTrigger globalTrigger;
+
+    public static void setGlobalAnimation(boolean globalAnimation){
+        TooltipOptions.globalAnimation = globalAnimation;
+    }
+
+    public static void setGlobalContent(String globalContent) {
+        TooltipOptions.globalContent = globalContent;
+    }
+
+    public static void setGlobalDelayShow(int globalDelayShow) {
+        TooltipOptions.globalDelayShow = globalDelayShow;
+    }
+
+    public static void setGlobalDelayHide(int globalDelayHide) {
+        TooltipOptions.globalDelayHide = globalDelayHide;
+    }
+
+    public static void setGlobalHtml(boolean globalHtml) {
+        TooltipOptions.globalHtml = globalHtml;
+    }
+
+    public static void setGlobalPlacement(TooltipPlacement globalPlacement) {
+        TooltipOptions.globalPlacement = globalPlacement;
+    }
+
+    public static void setGlobalResources(TooltipResources globalResources) {
+        TooltipOptions.globalResources = globalResources;
+    }
+
+    public static void setGlobalSelector(String globalSelector) {
+        TooltipOptions.globalSelector = globalSelector;
+    }
+
+    public static void setGlobalTemplate(SafeHtml globalTemplate) {
+        TooltipOptions.globalTemplate = globalTemplate;
+    }
+
+    public static void setGlobalTrigger(TooltipTrigger globalTrigger) {
+        TooltipOptions.globalTrigger = globalTrigger;
+    }
+
+    static {
+        //set default options globally
+        globalAnimation = true;
+        globalHtml = false;
+        globalPlacement = TooltipPlacement.TOP;
+        globalTrigger = TooltipTrigger.HOVER;
+        globalDelayShow = globalDelayHide = 0;
+
+    }
+
+    private Boolean animation;
     private String content;
-    private int delayShow;
-    private int delayHide;
-    private boolean html;
+    private Integer delayShow;
+    private Integer delayHide;
+    private Boolean html;
     private TooltipPlacement placement;
     private TooltipResources resources;
     private String selector;
@@ -24,13 +85,6 @@ public class TooltipOptions {
     private TooltipTrigger trigger;
 
     public TooltipOptions() {
-        this(true);
-    }
-
-    TooltipOptions(boolean initDefault){
-        if (initDefault){
-            initDefault();
-        }
     }
 
     TooltipOptions(TooltipOptions options) {
@@ -48,43 +102,43 @@ public class TooltipOptions {
     }
 
     public String getContent() {
-        return content;
+        return content != null ? content : globalContent;
     }
 
     public int getDelayHide() {
-        return delayHide;
+        return delayHide != null ? delayHide :globalDelayHide;
     }
 
     public int getDelayShow() {
-        return delayShow;
+        return delayShow != null ? delayShow :globalDelayShow;
     }
 
     public TooltipPlacement getPlacement() {
-        return placement;
+        return placement != null ? placement : globalPlacement;
     }
 
     public TooltipResources getResources() {
-        return resources;
+        return resources != null ? resources : globalResources;
     }
 
     public String getSelector() {
-        return selector;
+        return selector != null ? selector : globalSelector;
     }
 
     public SafeHtml getTemplate() {
-        return template;
+        return template != null ? template : globalTemplate;
     }
 
     public TooltipTrigger getTrigger() {
-        return trigger;
+        return trigger != null ? trigger : globalTrigger;
     }
 
     public boolean isAnimation() {
-        return animation;
+        return animation != null ? animation : globalAnimation;
     }
 
     public boolean isHtml() {
-        return html;
+        return html!= null ? html : globalHtml;
     }
 
     /**
@@ -209,13 +263,5 @@ public class TooltipOptions {
     public TooltipOptions withTrigger(TooltipTrigger trigger) {
         this.trigger = trigger;
         return this;
-    }
-
-    private void initDefault() {
-        animation = true;
-        html = false;
-        placement = TooltipPlacement.TOP;
-        trigger = TooltipTrigger.HOVER;
-        delayShow = delayHide = 0;
     }
 }

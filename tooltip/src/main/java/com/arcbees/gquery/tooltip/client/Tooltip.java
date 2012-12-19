@@ -24,14 +24,16 @@ public class Tooltip extends GQuery {
     }
 
     public Tooltip tooltip(TooltipOptions options) {
-        return tooltip(options, GWT.<TooltipResources>create(TooltipResources.class));
-    }
-
-    public Tooltip tooltip(TooltipOptions options, TooltipResources resources) {
         for (Element e : elements()) {
             GQuery $e = $(e);
             if ($e.data(TOOLTIP_DATA_KEY) == null) {
-                TooltipImpl impl = new TooltipImpl(e, options, resources);
+                TooltipImpl impl;
+                //use 2 different constructors for GWT optimization purpose
+                if (options.getResources() == null){
+                    impl = new TooltipImpl(e, options);
+                }else{
+                    impl = new TooltipImpl(e, options, options.getResources());
+                }
                 $e.data(TOOLTIP_DATA_KEY, impl);
             }
         }

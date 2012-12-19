@@ -88,6 +88,7 @@ public class TooltipImpl {
     private static final String TITLE_ATTRIBUTE = "title";
     private static final String DATA_TITLE_ATTRIBUTE = "data-original-title";
     private static final int ANIMATION_DURATION = 150;
+    private static TooltipResources DEFAULT_RESOURCES;
 
     private static void enter(Event e, TooltipOptions delegateOptions) {
         Element target = e.getCurrentEventTarget().cast();
@@ -112,6 +113,13 @@ public class TooltipImpl {
 
         impl.setTimer(timer);
         timer.schedule(impl.options.getDelayShow());
+    }
+
+    private static TooltipResources getDefaultResources() {
+        if (DEFAULT_RESOURCES == null) {
+            DEFAULT_RESOURCES = GWT.create(TooltipResources.class);
+        }
+        return DEFAULT_RESOURCES;
     }
 
     private static TooltipImpl getImpl(Element e, TooltipOptions initOption) {
@@ -162,13 +170,17 @@ public class TooltipImpl {
     private Timer timer;
     private TooltipStyle style;
 
+    public TooltipImpl(Element element, TooltipOptions options) {
+       this(element, options, getDefaultResources());
+    }
+
     public TooltipImpl(Element element, TooltipOptions options, TooltipResources resources) {
         this.$element = $(element);
         this.options = getOptions(options);
         this.style = resources.css();
-
         init();
     }
+
 
     public void destroy() {
         hide();
@@ -295,7 +307,7 @@ public class TooltipImpl {
     private TooltipOptions getOptions(TooltipOptions initialOptions){
         TooltipOptions options;
         if (initialOptions == null){
-            options = new TooltipOptions(false);
+            options = new TooltipOptions();
         }else{
             //make a fresh copy to not impact other tooltips if the element overrides some options with its attributes
             options = new TooltipOptions(initialOptions);
