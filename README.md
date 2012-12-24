@@ -13,6 +13,20 @@
 ##Maven Use
 Use our snapshots repository until we release
 
+##Current Release
+0.0.1a4
+
+```
+<dependency>
+    <groupId>com.arcbees.gquery</groupId>
+    <artifactId>gquery</artifactId>
+    <version>0.0.1a4</version>
+</dependency>
+```
+
+##Current Snapshot
+0.0.1-SNAPSHOT
+
 ```
 <repositories>
     <repository>
@@ -31,9 +45,6 @@ Use our snapshots repository until we release
     <version>0.0.1-SNAPSHOT</version>
 </dependency>
 ```
-
-##Current Release
-0.0.1-SNAPSHOT
 
 ##Thanks to
 [![Arcbees.com](http://arcbees-ads.appspot.com/images/1.png)](http://arcbees.com)
