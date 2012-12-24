@@ -25,6 +25,47 @@
         <name>ArcBees</name>
         <url>http://arcbees.com</url>
     </organization>
+    
+    <developers>
+        <developer>
+            <id>philippe.beaudoin</id>
+            <name>Philippe Beaudoin</name>
+            <email>philippe.beaudoin@gmail.com</email>
+            <organization>ArcBees</organization>
+            <organizationUrl>http://arcbees.com</organizationUrl>
+            <roles>
+                <role>architect</role>
+                <role>lead developer</role>
+            </roles>
+            <timezone>-5</timezone>
+            <properties>
+                <picUrl>http://goo.gl/xV2K8</picUrl>
+            </properties>
+        </developer>
+        <developer>
+            <id>goudreau.christian</id>
+            <name>Christain Goudreau</name>
+            <email>goudreau.christian@gmail.com</email>
+            <organization>ArcBees</organization>
+            <organizationUrl>http://arcbees.com</organizationUrl>
+            <roles>
+                <role>architect</role>
+                <role>developer</role>
+            </roles>
+            <timezone>-5</timezone>
+        </developer>
+        <developer>
+            <id>branflake2267</id>
+            <name>Brandon Donnelson</name>
+            <email>branflake2267@gmail.com</email>
+            <organization>ArcBees</organization>
+            <organizationUrl>http://arcbees.com</organizationUrl>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <timezone>-8</timezone>
+        </developer>
+    </developers>
 
     <scm>
         <connection>scm:git:https://github.com/ArcBees/ArcBees-GQuery-Plugins.git</connection>

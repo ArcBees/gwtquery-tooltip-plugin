@@ -14,13 +14,13 @@
 Use our snapshots repository until we release
 
 ##Current Release
-0.0.1a2
+0.0.1a4
 
 ```
 <dependency>
     <groupId>com.arcbees.gquery</groupId>
     <artifactId>gquery</artifactId>
-    <version>0.0.1a2</version>
+    <version>0.0.1a4</version>
 </dependency>
 ```
 
