@@ -1,16 +1,30 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <name>ArcBees GQuery Plugins</name>
+    <parent>
+        <groupId>org.sonatype.oss</groupId>
+        <artifactId>oss-parent</artifactId>
+        <version>7</version>
+    </parent>
+
     <groupId>com.arcbees.gquery</groupId>
     <artifactId>gquery-plugins</artifactId>
+    <version>0.1-alpha-11-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <version>0.0.1-SNAPSHOT</version>
 
-    <inceptionYear>2012</inceptionYear>
+    <modules>
+        <module>tooltip</module>
+    </modules>
+
+    <name>ArcBees GQuery Plugins</name>
     <description>Arcbees GQuery Plugins</description>
     <url>https://github.com/ArcBees/ArcBees-GQuery-Plugins</url>
+    <inceptionYear>2012</inceptionYear>
+
+    <organization>
+        <name>ArcBees</name>
+        <url>http://arcbees.com</url>
+    </organization>
 
     <licenses>
         <license>
@@ -21,11 +35,6 @@
         </license>
     </licenses>
 
-    <organization>
-        <name>ArcBees</name>
-        <url>http://arcbees.com</url>
-    </organization>
-    
     <developers>
         <developer>
             <id>branflake2267</id>
@@ -44,7 +53,6 @@
         <connection>scm:git:https://github.com/ArcBees/ArcBees-GQuery-Plugins.git</connection>
         <developerConnection>scm:git:https://github.com/ArcBees/ArcBees-GQuery-Plugins.git</developerConnection>
         <url>https://github.com/ArcBees/ArcBees-GQuery-Plugins</url>
-        <tag>gquery-plugins-0.0.1a3</tag>
     </scm>
 
     <issueManagement>
@@ -52,78 +60,46 @@
         <url>https://github.com/ArcBees/ArcBees-GQuery-Plugins/issues</url>
     </issueManagement>
 
-    <modules>
-        <module>tooltip</module>
-    </modules>
-
     <properties>
-        <maven.compiler.source>1.6</maven.compiler.source>
-        <maven.compiler.target>1.6</maven.compiler.target>
-        <gQueryVersion>1.2.0</gQueryVersion>
+        <!-- client -->
+        <gquery.version>1.2.0</gquery.version>
         <gwt.version>2.5.0</gwt.version>
         <gwt.maven.version>2.5.0</gwt.maven.version>
         <gwt.style>OBF</gwt.style>
+
+        <!-- maven -->
         <target.jdk>1.6</target.jdk>
     </properties>
 
     <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-source-plugin</artifactId>
-                    <version>2.2</version>
-                    <executions>
-                        <execution>
-                            <id>attach-sources</id>
-                            <phase>verify</phase>
-                            <goals>
-                                <goal>jar-no-fork</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.0</version>
+                <configuration>
+                    <source>${target.jdk}</source>
+                    <target>${target.jdk}</target>
+                </configuration>
+            </plugin>
 
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-release-plugin</artifactId>
-                    <!-- <version>2.4</version> -->
-                    <configuration>
-                        <autoVersionSubmodules>true</autoVersionSubmodules>
-                        <useReleaseProfile>false</useReleaseProfile>
-                        <releaseProfiles>release</releaseProfiles>
-                        <arguments>-Psonatype-oss-release -Dgpg.passphrase=${gpg.passphrase}</arguments>
-                    </configuration>
-                </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>2.2.1</version>
+            </plugin>
 
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-javadoc-plugin</artifactId>
-                    <version>2.9</version>
-                    <executions>
-                        <execution>
-                            <id>attach-javadocs</id>
-                            <goals>
-                                <goal>jar</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                    <configuration>
-                        <source>${target.jdk}</source>
-                        <failOnError>true</failOnError>
-                        <quiet>true</quiet>
-                        <links>
-                            <link>http://download.oracle.com/javase/6/docs/api/</link>
-                            <link>http://google-web-toolkit.googlecode.com/svn/javadoc/2.0/</link>
-                            <link>http://static.springsource.org/spring/docs/3.0.x/javadoc-api/</link>
-                            <link>http://google-gin.googlecode.com/svn/trunk/javadoc/</link>
-                            <link>http://google-guice.googlecode.com/svn/trunk/javadoc/</link>
-                            <link>http://aopalliance.sourceforge.net/doc/</link>
-                        </links>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <configuration>
+                    <autoVersionSubmodules>true</autoVersionSubmodules>
+                    <useReleaseProfile>false</useReleaseProfile>
+                    <releaseProfiles>release</releaseProfiles>
+                    <arguments>-Psonatype-oss-release -Prelease -Dgpg.passphrase=${gpg.passphrase}</arguments>
+                </configuration>
+            </plugin>
+        </plugins>
     </build>
 
     <repositories>
@@ -159,7 +135,7 @@
         <dependency>
             <groupId>com.googlecode.gwtquery</groupId>
             <artifactId>gwtquery</artifactId>
-            <version>${gQueryVersion}</version>
+            <version>${gquery.version}</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
@@ -176,6 +152,52 @@
     </distributionManagement>
 
     <profiles>
+        <profile>
+            <id>sonatype-oss-release</id>
+            <modules>
+                <module>tooltip</module>
+            </modules>
+        </profile>
+
+        <profile>
+            <id>release</id>
+            <activation>
+                <property>
+                    <name>performRelease</name>
+                    <value>true</value>
+                </property>
+            </activation>
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-javadoc-plugin</artifactId>
+                            <version>2.9</version>
+                            <executions>
+                                <execution>
+                                    <id>attach-javadocs</id>
+                                    <goals>
+                                        <goal>jar</goal>
+                                    </goals>
+                                </execution>
+                            </executions>
+                            <configuration>
+                                <source>${target.jdk}</source>
+                                <failOnError>true</failOnError>
+                                <quiet>true</quiet>
+                                <links>
+                                    <link>http://download.oracle.com/javase/6/docs/api/</link>
+                                    <link>http://google-web-toolkit.googlecode.com/svn/javadoc/2.0/</link>
+                                    <link>http://aopalliance.sourceforge.net/doc/</link>
+                                </links>
+                            </configuration>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+            </build>
+        </profile>
+
         <profile>
             <id>release-sign-artifacts</id>
             <activation>
@@ -202,43 +224,6 @@
                         </plugin>
                     </plugins>
                 </pluginManagement>
-            </build>
-        </profile>
-
-        <profile>
-            <id>release</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-source-plugin</artifactId>
-                        <version>2.1.2</version>
-                        <executions>
-                            <execution>
-                                <id>attach-sources</id>
-                                <phase>verify</phase>
-                                <goals>
-                                    <goal>jar-no-fork</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>2.7</version>
-                        <executions>
-                            <execution>
-                                <id>attach-javadocs</id>
-                                <phase>verify</phase>
-                                <goals>
-                                    <goal>jar</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
             </build>
         </profile>
     </profiles>

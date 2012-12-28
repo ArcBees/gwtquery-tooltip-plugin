@@ -13,20 +13,16 @@
 ##Maven Use
 Use our snapshots repository until we release
 
-##Current Release
-0.0.1a4
-
+##Current Maven Release Use
 ```
 <dependency>
     <groupId>com.arcbees.gquery</groupId>
     <artifactId>gquery</artifactId>
-    <version>0.0.1a4</version>
+    <version>0.1-alpha-10</version>
 </dependency>
 ```
 
-##Current Snapshot
-0.0.1-SNAPSHOT
-
+##Current Maven Snapshot Use
 ```
 <repositories>
     <repository>
@@ -42,7 +38,7 @@ Use our snapshots repository until we release
 <dependency>
     <groupId>com.arcbees.gquery</groupId>
     <artifactId>gquery</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.1-alpha-10-SNAPSHOT</version>
 </dependency>
 ```
 
