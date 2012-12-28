@@ -62,26 +62,25 @@
     </modules>
 
     <properties>
-        <maven.compiler.source>1.6</maven.compiler.source>
-        <maven.compiler.target>1.6</maven.compiler.target>
-        <java.version>1.6</java.version>
+        <!-- client -->
         <gquery.version>1.2.0</gquery.version>
         <gwt.version>2.5.0</gwt.version>
         <gwt.maven.version>2.5.0</gwt.maven.version>
         <gwt.style>OBF</gwt.style>
+        
+        <!-- maven -->
         <target.jdk>1.6</target.jdk>
     </properties>
 
     <build>
         <plugins>
-            <!-- Build the core app -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>2.3.2</version>
                 <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
+                    <source>${target.jdk}</source>
+                    <target>${target.jdk}</target>
                 </configuration>
             </plugin>
 
