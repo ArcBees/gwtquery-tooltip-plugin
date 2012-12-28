@@ -10,38 +10,6 @@
   </tr>
 </table>
 
-##Maven Use
-Use our snapshots repository until we release
-
-##Current Maven Release Use
-```
-<dependency>
-    <groupId>com.arcbees.gquery</groupId>
-    <artifactId>tooltip</artifactId>
-    <version>0.1-alpha-10</version>
-</dependency>
-```
-
-##Current Maven Snapshot Use
-```
-<repositories>
-    <repository>
-        <id>sonatype.snapshots</id>
-        <name>Sonatype snapshot repository</name>
-        <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-        <snapshots>
-            <enabled>true</enabled>
-        </snapshots>
-    </repository>
-</repositories>
-
-<dependency>
-    <groupId>com.arcbees.gquery</groupId>
-    <artifactId>tooltip</artifactId>
-    <version>0.1-alpha-10-SNAPSHOT</version>
-</dependency>
-```
-
 ##Thanks to
 [![Arcbees.com](http://arcbees-ads.appspot.com/images/1.png)](http://arcbees.com)
 
