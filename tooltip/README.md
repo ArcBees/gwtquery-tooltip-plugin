@@ -4,6 +4,16 @@ This is the plugin Tooltip for GwtQuery Library.
 ##Maven Use
 Use our snapshots repository until we release
 
+##Current Maven Release Use
+```
+<dependency>
+    <groupId>com.arcbees.gquery</groupId>
+    <artifactId>tooltip</artifactId>
+    <version>0.1-alpha-10</version>
+</dependency>
+```
+
+##Current Maven Snapshot Use
 ```
 <repositories>
     <repository>
@@ -19,7 +29,7 @@ Use our snapshots repository until we release
 <dependency>
     <groupId>com.arcbees.gquery</groupId>
     <artifactId>tooltip</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.1-alpha-10-SNAPSHOT</version>
 </dependency>
 ```
 
