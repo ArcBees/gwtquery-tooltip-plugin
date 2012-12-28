@@ -103,6 +103,7 @@
                         -Dgpg.passphrase=${gpg.passphrase}</arguments>
                 </configuration>
             </plugin>
+        </plugins>
     </build>
 
     <repositories>

@@ -35,7 +35,7 @@
             <groupId>com.googlecode.gwtquery</groupId>
             <artifactId>gwtquery</artifactId>
             <scope>provided</scope>
-            <version>${gQueryVersion}</version>
+            <version>${gquery.version}</version>
         </dependency>
     </dependencies>
 
