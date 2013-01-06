@@ -14,9 +14,9 @@ import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Timer;
 
+import static com.arcbees.gquery.tooltip.client.Tooltip.TOOLTIP_DATA_KEY;
 import static com.arcbees.gquery.tooltip.client.Tooltip.Tooltip;
 import static com.google.gwt.query.client.GQuery.$;
-import static com.arcbees.gquery.tooltip.client.Tooltip.TOOLTIP_DATA_KEY;
 
 public class TooltipImpl {
     public static interface DefaultTemplate extends SafeHtmlTemplates {
@@ -43,36 +43,36 @@ public class TooltipImpl {
         private long width;
     }
 
-    private static interface Converter<T>{
+    private static interface Converter<T> {
         T convert(String s);
     }
 
-    private static class StringConverter implements Converter<String>{
+    private static class StringConverter implements Converter<String> {
         @Override
         public String convert(String s) {
             return s;
         }
     }
 
-    private static class BooleanConverter implements Converter<Boolean>{
+    private static class BooleanConverter implements Converter<Boolean> {
         @Override
         public Boolean convert(String s) {
             return Boolean.parseBoolean(s);
         }
     }
 
-    private static class IntegerConverter implements Converter<Integer>{
+    private static class IntegerConverter implements Converter<Integer> {
         @Override
         public Integer convert(String s) {
-            try{
+            try {
                 return Integer.parseInt(s);
-            }catch(NumberFormatException e){
+            } catch (NumberFormatException e) {
                 return null;
             }
         }
     }
 
-    private static class EnumConverter<T extends Enum<T>> implements Converter<T>{
+    private static class EnumConverter<T extends Enum<T>> implements Converter<T> {
         private Class<T> enumClass;
 
         private EnumConverter(Class<T> enumClass) {
@@ -81,7 +81,7 @@ public class TooltipImpl {
 
         @Override
         public T convert(String s) {
-            return Enum.valueOf(enumClass,s.toUpperCase());
+            return Enum.valueOf(enumClass, s.toUpperCase());
         }
     }
 
@@ -171,7 +171,7 @@ public class TooltipImpl {
     private TooltipStyle style;
 
     public TooltipImpl(Element element, TooltipOptions options) {
-       this(element, options, getDefaultResources());
+        this(element, options, getDefaultResources());
     }
 
     public TooltipImpl(Element element, TooltipOptions options, TooltipResources resources) {
@@ -180,7 +180,6 @@ public class TooltipImpl {
         this.style = resources.css();
         init();
     }
-
 
     public void destroy() {
         hide();
@@ -304,11 +303,11 @@ public class TooltipImpl {
         }
     }
 
-    private TooltipOptions getOptions(TooltipOptions initialOptions){
+    private TooltipOptions getOptions(TooltipOptions initialOptions) {
         TooltipOptions options;
-        if (initialOptions == null){
+        if (initialOptions == null) {
             options = new TooltipOptions();
-        }else{
+        } else {
             //make a fresh copy to not impact other tooltips if the element overrides some options with its attributes
             options = new TooltipOptions(initialOptions);
         }
@@ -326,11 +325,10 @@ public class TooltipImpl {
         options.withSelector(readDataAttributes("selector", options.getSelector(), new StringConverter()));
 
         return options;
-
     }
 
-    private SafeHtml getTemplate(){
-        if (options.getTemplate() != null){
+    private SafeHtml getTemplate() {
+        if (options.getTemplate() != null) {
             return options.getTemplate();
         }
 
@@ -348,7 +346,11 @@ public class TooltipImpl {
         String title = $element.attr(DATA_TITLE_ATTRIBUTE);
 
         if (title == null || title.length() == 0) {
-            title = options.getContent();
+            if (options.getContentProvider() != null) {
+                title = options.getContentProvider().getContent($element.get(0));
+            } else {
+                title = options.getContent();
+            }
         }
         return title;
     }
@@ -397,15 +399,15 @@ public class TooltipImpl {
         return this.hover;
     }
 
-    private <T> T readDataAttributes(String name, T defaultData, Converter<T> converter){
-        String value = $element.data("tooltip-"+name, String.class);
+    private <T> T readDataAttributes(String name, T defaultData, Converter<T> converter) {
+        String value = $element.data("tooltip-" + name, String.class);
 
-        if (value == null || value.length() == 0){
+        if (value == null || value.length() == 0) {
             //TODO $.data() should be able to read html5 data-* attributes
-            value = $element.attr("data-tooltip-"+name);
+            value = $element.attr("data-tooltip-" + name);
         }
 
-        if (value == null || value.length() == 0){
+        if (value == null || value.length() == 0) {
             return defaultData;
         }
 
@@ -415,7 +417,7 @@ public class TooltipImpl {
     }
 
     private void setContent(String title) {
-        GQuery inner = getTip().find("."+style.tooltipInner());
+        GQuery inner = getTip().find("." + style.tooltipInner());
         if (options.isHtml()) {
             inner.html(title);
         } else {
@@ -428,9 +430,9 @@ public class TooltipImpl {
     }
 
     //TODO move this code in GwtQuery
-    private void setOffset(GQuery $element, long top, long left){
+    private void setOffset(GQuery $element, long top, long left) {
         String position = $element.css("position", true);
-        if ("static".equals(position)){
+        if ("static".equals(position)) {
             $element.get(0).getStyle().setPosition(Position.RELATIVE);
         }
 
@@ -441,20 +443,20 @@ public class TooltipImpl {
         long curLeft = 0;
 
         if (("absolute".equals(position) || "fixed".equals(position)) && ("auto".equals(curCSSTop) || "auto".equals
-                (curCSSLeft))){
+                (curCSSLeft))) {
             Offset curPosition = $element.position();
             curTop = curPosition.top;
             curLeft = curPosition.left;
-        }else{
+        } else {
             try {
                 curTop = Long.parseLong(curCSSTop);
-            }catch(NumberFormatException e){
+            } catch (NumberFormatException e) {
                 curTop = 0;
             }
 
             try {
                 curLeft = Long.parseLong(curCSSLeft);
-            }catch(NumberFormatException e){
+            } catch (NumberFormatException e) {
                 curLeft = 0;
             }
         }
@@ -462,8 +464,7 @@ public class TooltipImpl {
         long newTop = top - curOffset.top + curTop;
         long newLeft = left - curOffset.left + curLeft;
 
-        $element.css("top",""+newTop).css("left", ""+newLeft);
-
+        $element.css("top", "" + newTop).css("left", "" + newLeft);
     }
 
     private void setTimer(Timer timer) {

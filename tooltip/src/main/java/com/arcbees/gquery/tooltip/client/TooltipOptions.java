@@ -1,5 +1,6 @@
 package com.arcbees.gquery.tooltip.client;
 
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.safehtml.shared.SafeHtml;
 
 public class TooltipOptions {
@@ -12,8 +13,13 @@ public class TooltipOptions {
         CLICK, HOVER, FOCUS, MANUAL;
     }
 
+    public interface TooltipContentProvider {
+        String getContent(Element element);
+    }
+
     private static boolean globalAnimation;
     private static String globalContent;
+    private static TooltipContentProvider globalContentProvider;
     private static int globalDelayShow;
     private static int globalDelayHide;
     private static boolean globalHtml;
@@ -23,12 +29,16 @@ public class TooltipOptions {
     private static SafeHtml globalTemplate;
     private static TooltipTrigger globalTrigger;
 
-    public static void setGlobalAnimation(boolean globalAnimation){
+    public static void setGlobalAnimation(boolean globalAnimation) {
         TooltipOptions.globalAnimation = globalAnimation;
     }
 
     public static void setGlobalContent(String globalContent) {
         TooltipOptions.globalContent = globalContent;
+    }
+
+    public static void setGlobalContentProvider(TooltipContentProvider globalContentProvider) {
+        TooltipOptions.globalContentProvider = globalContentProvider;
     }
 
     public static void setGlobalDelayShow(int globalDelayShow) {
@@ -70,11 +80,11 @@ public class TooltipOptions {
         globalPlacement = TooltipPlacement.TOP;
         globalTrigger = TooltipTrigger.HOVER;
         globalDelayShow = globalDelayHide = 0;
-
     }
 
     private Boolean animation;
     private String content;
+    private TooltipContentProvider contentProvider;
     private Integer delayShow;
     private Integer delayHide;
     private Boolean html;
@@ -94,8 +104,9 @@ public class TooltipOptions {
             placement = options.getPlacement();
             selector = options.getSelector();
             content = options.getContent();
+            contentProvider = options.getContentProvider();
             trigger = options.getTrigger();
-            delayShow= options.getDelayShow();
+            delayShow = options.getDelayShow();
             delayHide = options.getDelayHide();
             resources = options.getResources();
         }
@@ -105,12 +116,16 @@ public class TooltipOptions {
         return content != null ? content : globalContent;
     }
 
+    public TooltipContentProvider getContentProvider() {
+        return contentProvider != null ? contentProvider : globalContentProvider;
+    }
+
     public int getDelayHide() {
-        return delayHide != null ? delayHide :globalDelayHide;
+        return delayHide != null ? delayHide : globalDelayHide;
     }
 
     public int getDelayShow() {
-        return delayShow != null ? delayShow :globalDelayShow;
+        return delayShow != null ? delayShow : globalDelayShow;
     }
 
     public TooltipPlacement getPlacement() {
@@ -138,7 +153,7 @@ public class TooltipOptions {
     }
 
     public boolean isHtml() {
-        return html!= null ? html : globalHtml;
+        return html != null ? html : globalHtml;
     }
 
     /**
@@ -158,6 +173,16 @@ public class TooltipOptions {
      */
     public TooltipOptions withContent(String content) {
         this.content = content;
+        return this;
+    }
+
+    /**
+     * Set the Object used for retrieving the content of the tooltip
+     *
+     * @param contentProvider
+     */
+    public TooltipOptions withContent(TooltipContentProvider contentProvider) {
+        this.contentProvider = contentProvider;
         return this;
     }
 
@@ -228,6 +253,7 @@ public class TooltipOptions {
 
     /**
      * Resources used by the tooltip
+     *
      * @param resources
      */
     public TooltipOptions withResources(TooltipResources resources) {
