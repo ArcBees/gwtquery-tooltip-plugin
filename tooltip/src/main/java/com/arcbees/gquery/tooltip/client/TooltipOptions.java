@@ -19,7 +19,7 @@ public class TooltipOptions {
 
     private static boolean globalAnimation;
     private static String globalContent;
-    private static TooltipContentProvider globalContentGetter;
+    private static TooltipContentProvider globalContentProvider;
     private static int globalDelayShow;
     private static int globalDelayHide;
     private static boolean globalHtml;
@@ -37,8 +37,8 @@ public class TooltipOptions {
         TooltipOptions.globalContent = globalContent;
     }
 
-    public static void setGlobalContentGetter(TooltipContentProvider globalContentGetter) {
-        TooltipOptions.globalContentGetter = globalContentGetter;
+    public static void setGlobalContentProvider(TooltipContentProvider globalContentProvider) {
+        TooltipOptions.globalContentProvider = globalContentProvider;
     }
 
     public static void setGlobalDelayShow(int globalDelayShow) {
@@ -84,7 +84,7 @@ public class TooltipOptions {
 
     private Boolean animation;
     private String content;
-    private TooltipContentProvider contentGetter;
+    private TooltipContentProvider contentProvider;
     private Integer delayShow;
     private Integer delayHide;
     private Boolean html;
@@ -104,7 +104,7 @@ public class TooltipOptions {
             placement = options.getPlacement();
             selector = options.getSelector();
             content = options.getContent();
-            contentGetter = options.getContentGetter();
+            contentProvider = options.getContentProvider();
             trigger = options.getTrigger();
             delayShow = options.getDelayShow();
             delayHide = options.getDelayHide();
@@ -116,8 +116,8 @@ public class TooltipOptions {
         return content != null ? content : globalContent;
     }
 
-    public TooltipContentProvider getContentGetter() {
-        return contentGetter != null ? contentGetter : globalContentGetter;
+    public TooltipContentProvider getContentProvider() {
+        return contentProvider != null ? contentProvider : globalContentProvider;
     }
 
     public int getDelayHide() {
@@ -179,10 +179,10 @@ public class TooltipOptions {
     /**
      * Set the Object used for retrieving the content of the tooltip
      *
-     * @param contentGetter
+     * @param contentProvider
      */
-    public TooltipOptions withContent(TooltipContentProvider contentGetter) {
-        this.contentGetter = contentGetter;
+    public TooltipOptions withContent(TooltipContentProvider contentProvider) {
+        this.contentProvider = contentProvider;
         return this;
     }
 

@@ -346,8 +346,8 @@ public class TooltipImpl {
         String title = $element.attr(DATA_TITLE_ATTRIBUTE);
 
         if (title == null || title.length() == 0) {
-            if (options.getContentGetter() != null) {
-                title = options.getContentGetter().getContent($element.get(0));
+            if (options.getContentProvider() != null) {
+                title = options.getContentProvider().getContent($element.get(0));
             } else {
                 title = options.getContent();
             }
