@@ -226,8 +226,13 @@ public class TooltipImpl {
                 .removeClass("in", "top", "bottom", "left", "right")
                 .css("top", "0")
                 .css("left", "0")
-                .css("display", "block")
-                .insertAfter($element);
+                .css("display", "block");
+
+        if (options.getContainer() != null && options.getContainer().length() > 0) {
+            tooltip.appendTo($(options.getContainer()));
+        } else {
+            tooltip.insertAfter($element);
+        }
 
         OffsetInfo oi = OffsetInfo.from($element);
         long actualWidth = tooltip.get(0).getOffsetWidth();
