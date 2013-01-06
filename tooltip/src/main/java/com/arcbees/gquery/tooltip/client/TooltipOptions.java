@@ -13,13 +13,13 @@ public class TooltipOptions {
         CLICK, HOVER, FOCUS, MANUAL;
     }
 
-    public interface TooltipContentGetter {
+    public interface TooltipContentProvider {
         String getContent(Element element);
     }
 
     private static boolean globalAnimation;
     private static String globalContent;
-    private static TooltipContentGetter globalContentGetter;
+    private static TooltipContentProvider globalContentGetter;
     private static int globalDelayShow;
     private static int globalDelayHide;
     private static boolean globalHtml;
@@ -29,7 +29,7 @@ public class TooltipOptions {
     private static SafeHtml globalTemplate;
     private static TooltipTrigger globalTrigger;
 
-    public static void setAnimation(boolean globalAnimation) {
+    public static void setGlobalAnimation(boolean globalAnimation) {
         TooltipOptions.globalAnimation = globalAnimation;
     }
 
@@ -37,7 +37,7 @@ public class TooltipOptions {
         TooltipOptions.globalContent = globalContent;
     }
 
-    public static void setGlobalContentGetter(TooltipContentGetter globalContentGetter) {
+    public static void setGlobalContentGetter(TooltipContentProvider globalContentGetter) {
         TooltipOptions.globalContentGetter = globalContentGetter;
     }
 
@@ -84,7 +84,7 @@ public class TooltipOptions {
 
     private Boolean animation;
     private String content;
-    private TooltipContentGetter contentGetter;
+    private TooltipContentProvider contentGetter;
     private Integer delayShow;
     private Integer delayHide;
     private Boolean html;
@@ -116,7 +116,7 @@ public class TooltipOptions {
         return content != null ? content : globalContent;
     }
 
-    public TooltipContentGetter getContentGetter() {
+    public TooltipContentProvider getContentGetter() {
         return contentGetter != null ? contentGetter : globalContentGetter;
     }
 
@@ -181,7 +181,7 @@ public class TooltipOptions {
      *
      * @param contentGetter
      */
-    public TooltipOptions withContent(TooltipContentGetter contentGetter) {
+    public TooltipOptions withContent(TooltipContentProvider contentGetter) {
         this.contentGetter = contentGetter;
         return this;
     }
