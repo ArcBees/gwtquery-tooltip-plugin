@@ -18,6 +18,7 @@ public class TooltipOptions {
     }
 
     private static boolean globalAnimation;
+    private static String globalContainer;
     private static String globalContent;
     private static TooltipContentProvider globalContentProvider;
     private static int globalDelayShow;
@@ -31,6 +32,10 @@ public class TooltipOptions {
 
     public static void setGlobalAnimation(boolean globalAnimation) {
         TooltipOptions.globalAnimation = globalAnimation;
+    }
+
+    public static void setGlobalContainer(String globalContainer) {
+        TooltipOptions.globalContainer = globalContainer;
     }
 
     public static void setGlobalContent(String globalContent) {
@@ -80,9 +85,11 @@ public class TooltipOptions {
         globalPlacement = TooltipPlacement.TOP;
         globalTrigger = TooltipTrigger.HOVER;
         globalDelayShow = globalDelayHide = 0;
+        globalContainer = "body";
     }
 
     private Boolean animation;
+    private String container;
     private String content;
     private TooltipContentProvider contentProvider;
     private Integer delayShow;
@@ -104,12 +111,17 @@ public class TooltipOptions {
             placement = options.getPlacement();
             selector = options.getSelector();
             content = options.getContent();
+            container = options.getContainer();
             contentProvider = options.getContentProvider();
             trigger = options.getTrigger();
             delayShow = options.getDelayShow();
             delayHide = options.getDelayHide();
             resources = options.getResources();
         }
+    }
+
+    public String getContainer() {
+        return container != null ? container : globalContainer;
     }
 
     public String getContent() {
@@ -163,6 +175,17 @@ public class TooltipOptions {
      */
     public TooltipOptions withAnimation(boolean animation) {
         this.animation = animation;
+        return this;
+    }
+
+    /**
+     * css selector defining the container where the tooltip will be appended. If the container is null (or empty
+     * string, the tooltip will be added after the element targeted by the tooltip.
+     *
+     * @param container
+     */
+    public TooltipOptions withContainer(String container) {
+        this.container = container;
         return this;
     }
 
