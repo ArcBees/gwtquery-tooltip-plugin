@@ -284,11 +284,12 @@ public class TooltipImpl {
 
     //TODO use GQuery.on() method when it will be implemented in GQuery :)
     private void bind(String eventType, Function callback) {
+        //add namespace
+        eventType += ".tooltip";
         if (options.getSelector() != null) {
-            //TODO we should add a namespace, but delegate doesn't support it yet
             $element.delegate(options.getSelector(), eventType, callback);
         } else {
-            $element.bind(eventType + ".tooltip", callback);
+            $element.bind(eventType, callback);
         }
     }
 
@@ -481,7 +482,7 @@ public class TooltipImpl {
     private void unbind() {
         if (options.getSelector() != null) {
             //TODO we should add a namespace, but die doesn't support it yet
-            $element.die();
+            $element.die(".tooltip");
         } else {
             $element.unbind(".tooltip");
         }
