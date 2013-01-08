@@ -223,7 +223,7 @@ public class TooltipImpl {
         setContent(title);
 
         tooltip.detach()
-                .removeClass("in", "top", "bottom", "left", "right")
+                .removeClass(style.in(), style.top(), style.bottom(), style.left(), style.right())
                 .css("top", "0")
                 .css("left", "0")
                 .css("display", "block");
@@ -241,7 +241,7 @@ public class TooltipImpl {
         long finalLeft = -1;
         String placementClass = null;
 
-        switch (options.getPlacement()) {
+        switch (getPlacement()) {
             case BOTTOM:
                 finalTop = oi.top + oi.height;
                 finalLeft = oi.left + oi.width / 2 - actualWidth / 2;
@@ -323,6 +323,7 @@ public class TooltipImpl {
         options.withDelayShow(readDataAttributes("delayShow", options.getDelayShow(), new IntegerConverter()));
         options.withHtml(readDataAttributes("html", options.isHtml(), new BooleanConverter()));
         options.withContent(readDataAttributes("content", options.getContent(), new StringConverter()));
+        options.withContainer(readDataAttributes("container", options.getContainer(), new StringConverter()));
         options.withPlacement(readDataAttributes("placement", options.getPlacement(),
                 new EnumConverter<TooltipPlacement>(TooltipPlacement.class)));
         options.withTrigger(readDataAttributes("trigger", options.getTrigger(), new EnumConverter<TooltipTrigger>
@@ -330,6 +331,14 @@ public class TooltipImpl {
         options.withSelector(readDataAttributes("selector", options.getSelector(), new StringConverter()));
 
         return options;
+    }
+
+    private TooltipPlacement getPlacement() {
+        if (options.getPlacementProvider() != null) {
+            return options.getPlacementProvider().getPlacement($element.get(0));
+        }
+
+        return options.getPlacement();
     }
 
     private SafeHtml getTemplate() {
