@@ -17,10 +17,15 @@ public class TooltipOptions {
         String getContent(Element element);
     }
 
+    public interface TooltipPlacementProvider {
+        TooltipPlacement getPlacement(Element element);
+    }
+
     private static boolean globalAnimation;
     private static String globalContainer;
     private static String globalContent;
     private static TooltipContentProvider globalContentProvider;
+    private static TooltipPlacementProvider globalPlacementProvider;
     private static int globalDelayShow;
     private static int globalDelayHide;
     private static boolean globalHtml;
@@ -62,6 +67,10 @@ public class TooltipOptions {
         TooltipOptions.globalPlacement = globalPlacement;
     }
 
+    public static void setGlobalPlacementProvider(TooltipPlacementProvider globalPlacementProvider) {
+        TooltipOptions.globalPlacementProvider = globalPlacementProvider;
+    }
+
     public static void setGlobalResources(TooltipResources globalResources) {
         TooltipOptions.globalResources = globalResources;
     }
@@ -96,6 +105,7 @@ public class TooltipOptions {
     private Integer delayHide;
     private Boolean html;
     private TooltipPlacement placement;
+    private TooltipPlacementProvider placementProvider;
     private TooltipResources resources;
     private String selector;
     private SafeHtml template;
@@ -109,6 +119,7 @@ public class TooltipOptions {
             animation = options.isAnimation();
             html = options.isHtml();
             placement = options.getPlacement();
+            placementProvider = options.getPlacementProvider();
             selector = options.getSelector();
             content = options.getContent();
             container = options.getContainer();
@@ -142,6 +153,10 @@ public class TooltipOptions {
 
     public TooltipPlacement getPlacement() {
         return placement != null ? placement : globalPlacement;
+    }
+
+    public TooltipPlacementProvider getPlacementProvider() {
+        return placementProvider != null ? placementProvider : globalPlacementProvider;
     }
 
     public TooltipResources getResources() {
@@ -271,6 +286,16 @@ public class TooltipOptions {
      */
     public TooltipOptions withPlacement(TooltipPlacement placement) {
         this.placement = placement;
+        return this;
+    }
+
+    /**
+     * How to position the tooltip
+     *
+     * @param placementProvider
+     */
+    public TooltipOptions withPlacement(TooltipPlacementProvider placementProvider) {
+        this.placementProvider = placementProvider;
         return this;
     }
 
