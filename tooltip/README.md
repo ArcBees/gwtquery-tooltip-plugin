@@ -9,7 +9,7 @@ Use our snapshots repository until we release
 <dependency>
     <groupId>com.arcbees.gquery</groupId>
     <artifactId>tooltip</artifactId>
-    <version>0.1-alpha-10</version>
+    <version>0.1-alpha-11</version>
 </dependency>
 ```
 
@@ -29,7 +29,7 @@ Use our snapshots repository until we release
 <dependency>
     <groupId>com.arcbees.gquery</groupId>
     <artifactId>tooltip</artifactId>
-    <version>0.1-alpha-10-SNAPSHOT</version>
+    <version>0.1-alpha-11-SNAPSHOT</version>
 </dependency>
 ```
 
