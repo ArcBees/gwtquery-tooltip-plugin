@@ -37,6 +37,7 @@ public class TooltipImpl {
 
             return oi;
         }
+
         private long height;
         private long left;
         private long top;
@@ -228,10 +229,14 @@ public class TooltipImpl {
                 .css("left", "0")
                 .css("display", "block");
 
-        if (options.getContainer() != null && options.getContainer().length() > 0) {
-            tooltip.appendTo($(options.getContainer()));
-        } else {
+        String container = options.getContainer();
+
+        if (container == null || "parent".equals(container)) {
             tooltip.insertAfter($element);
+        } else if ("element".equals(container)) {
+            tooltip.appendTo($element);
+        } else {
+            tooltip.appendTo($(container));
         }
 
         OffsetInfo oi = OffsetInfo.from($element);
