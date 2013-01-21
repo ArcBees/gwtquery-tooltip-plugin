@@ -5,7 +5,6 @@ import com.arcbees.gquery.tooltip.client.TooltipOptions.TooltipTrigger;
 import com.arcbees.gquery.tooltip.client.TooltipResources.TooltipStyle;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
-import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.query.client.Function;
 import com.google.gwt.query.client.GQuery;
 import com.google.gwt.query.client.GQuery.Offset;
@@ -271,7 +270,7 @@ public class TooltipImpl {
         }
 
         //TODO use GQuery.offset() method when it will be implemented
-        setOffset(tooltip, finalTop, finalLeft);
+        tooltip.offset((int) finalTop, (int) finalLeft);
         tooltip.addClass(placementClass)
                 .addClass(style.in());
     }
@@ -290,11 +289,12 @@ public class TooltipImpl {
 
     //TODO use GQuery.on() method when it will be implemented in GQuery :)
     private void bind(String eventType, Function callback) {
+        //add namespace
+        eventType += ".tooltip";
         if (options.getSelector() != null) {
-            //TODO we should add a namespace, but delegate doesn't support it yet
             $element.delegate(options.getSelector(), eventType, callback);
         } else {
-            $element.bind(eventType + ".tooltip", callback);
+            $element.bind(eventType, callback);
         }
     }
 
@@ -450,44 +450,6 @@ public class TooltipImpl {
         this.hover = b;
     }
 
-    //TODO move this code in GwtQuery
-    private void setOffset(GQuery $element, long top, long left) {
-        String position = $element.css("position", true);
-        if ("static".equals(position)) {
-            $element.get(0).getStyle().setPosition(Position.RELATIVE);
-        }
-
-        Offset curOffset = $element.offset();
-        String curCSSTop = $element.css("top", true);
-        String curCSSLeft = $element.css("left", true);
-        long curTop = 0;
-        long curLeft = 0;
-
-        if (("absolute".equals(position) || "fixed".equals(position)) && ("auto".equals(curCSSTop) || "auto".equals
-                (curCSSLeft))) {
-            Offset curPosition = $element.position();
-            curTop = curPosition.top;
-            curLeft = curPosition.left;
-        } else {
-            try {
-                curTop = Long.parseLong(curCSSTop);
-            } catch (NumberFormatException e) {
-                curTop = 0;
-            }
-
-            try {
-                curLeft = Long.parseLong(curCSSLeft);
-            } catch (NumberFormatException e) {
-                curLeft = 0;
-            }
-        }
-
-        long newTop = top - curOffset.top + curTop;
-        long newLeft = left - curOffset.left + curLeft;
-
-        $element.css("top", "" + newTop).css("left", "" + newLeft);
-    }
-
     private void setTimer(Timer timer) {
         assert this.timer == null : "timer should be first cancelled";
         this.timer = timer;
@@ -497,7 +459,7 @@ public class TooltipImpl {
     private void unbind() {
         if (options.getSelector() != null) {
             //TODO we should add a namespace, but die doesn't support it yet
-            $element.die();
+            $element.die(".tooltip");
         } else {
             $element.unbind(".tooltip");
         }
