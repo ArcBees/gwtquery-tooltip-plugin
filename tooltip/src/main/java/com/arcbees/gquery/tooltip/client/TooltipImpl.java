@@ -111,12 +111,13 @@ public class TooltipImpl {
         Element target = e.getCurrentEventTarget().cast();
         final TooltipImpl impl = getImpl(target, delegateOptions);
 
+        impl.cancelTimer();
+
         if (impl.options.getDelayShow() == 0) {
             impl.show();
             return;
         }
 
-        impl.cancelTimer();
         impl.setHover(true);
 
         Timer timer = new Timer() {
