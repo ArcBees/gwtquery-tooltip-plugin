@@ -323,7 +323,8 @@ public class TooltipImpl {
         }
 
         //read data-* attributes on element
-        options.withHtml(readDataAttributes("animation", options.isAnimation(), new BooleanConverter()));
+        options.withAnimation(readDataAttributes("animation", options.isAnimation(), new BooleanConverter()));
+        options.withDelay(readDataAttributes("delay", options.getDelayShow(), new IntegerConverter()));
         options.withDelayHide(readDataAttributes("delayHide", options.getDelayHide(), new IntegerConverter()));
         options.withDelayShow(readDataAttributes("delayShow", options.getDelayShow(), new IntegerConverter()));
         options.withHtml(readDataAttributes("html", options.isHtml(), new BooleanConverter()));
