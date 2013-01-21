@@ -194,8 +194,14 @@ public class TooltipOptions {
     }
 
     /**
-     * css selector defining the container where the tooltip will be appended. If the container is null (or empty
-     * string, the tooltip will be added after the element targeted by the tooltip.
+     * Css selector defining the container where the tooltip will be appended. If the
+     * container is null (or empty string, the tooltip will be added after the element targeted by the tooltip.
+     * <p/>
+     * If the <code>container</code> is equals to 'parent', the tooltip will be appended to the parent element of the
+     * element.
+     * <p/>
+     * If the <code>container</code> is equals to 'element', the tooltip will be appended directly to  the
+     * element. With this options, the tooltip is not hidden when the user hovers it.
      *
      * @param container
      */
