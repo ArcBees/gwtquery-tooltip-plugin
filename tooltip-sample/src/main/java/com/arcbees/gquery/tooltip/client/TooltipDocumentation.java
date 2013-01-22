@@ -39,7 +39,6 @@ import static com.arcbees.gquery.tooltip.client.Tooltip.Tooltip;
 import static com.google.gwt.query.client.GQuery.$;
 
 public class TooltipDocumentation implements EntryPoint {
-
     private static final SafeHtml contactImage = AbstractImagePrototype.create(ContactTooltipResources.INSTANCE
             .contact()).getSafeHtml();
 

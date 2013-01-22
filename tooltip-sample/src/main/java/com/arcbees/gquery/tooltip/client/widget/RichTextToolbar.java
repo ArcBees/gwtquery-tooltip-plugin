@@ -44,7 +44,6 @@ import com.google.gwt.user.client.ui.Widget;
  */
 @SuppressWarnings("deprecation")
 public class RichTextToolbar extends Composite {
-
     /**
      * This {@link ClientBundle} is used for all the button icons. Using a bundle
      * allows all of these images to be packed into a single image, which saves a
@@ -264,11 +263,9 @@ public class RichTextToolbar extends Composite {
     private Images images = (Images) GWT.create(Images.class);
     private Strings strings = (Strings) GWT.create(Strings.class);
     private EventHandler handler = new EventHandler();
-
     private RichTextArea richText;
     private RichTextArea.BasicFormatter basic;
     private RichTextArea.ExtendedFormatter extended;
-
     private VerticalPanel outer = new VerticalPanel();
     private HorizontalPanel topPanel = new HorizontalPanel();
     private HorizontalPanel bottomPanel = new HorizontalPanel();
@@ -290,7 +287,6 @@ public class RichTextToolbar extends Composite {
     private PushButton createLink;
     private PushButton removeLink;
     private PushButton removeFormat;
-
     private ListBox backColors;
     private ListBox foreColors;
     private ListBox fonts;

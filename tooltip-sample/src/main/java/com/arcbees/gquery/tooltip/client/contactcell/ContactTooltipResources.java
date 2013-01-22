@@ -21,7 +21,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.ImageResource;
 
 public interface ContactTooltipResources extends TooltipResources {
-
     ContactTooltipResources INSTANCE = GWT.create(ContactTooltipResources.class);
 
     @Override

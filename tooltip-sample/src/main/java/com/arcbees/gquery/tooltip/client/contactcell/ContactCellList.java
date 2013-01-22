@@ -26,7 +26,6 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.view.client.RangeChangeEvent.Handler;
 
 public class ContactCellList extends Composite {
-
     /**
      * The Cell used to render a {@link ContactInfo}. Code coming from the GWT
      * showcase

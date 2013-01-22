@@ -31,7 +31,6 @@ import java.util.Map;
  * http://gwt.google.com/samples/Showcase/Showcase.html#!CwCellList
  */
 public class ContactDatabase {
-
     /**
      * Information about a contact.
      */

@@ -33,7 +33,6 @@ import com.google.gwt.view.client.HasRows;
  * resources and avoid ghodt tooltip
  */
 public class ShowMorePagerPanel extends AbstractPager {
-
     /**
      * The default increment size.
      */

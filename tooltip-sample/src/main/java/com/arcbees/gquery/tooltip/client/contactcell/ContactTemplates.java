@@ -21,7 +21,6 @@ import com.google.gwt.safehtml.client.SafeHtmlTemplates;
 import com.google.gwt.safehtml.shared.SafeHtml;
 
 public interface ContactTemplates extends SafeHtmlTemplates {
-
     public static ContactTemplates INSTANCE = GWT.create(ContactTemplates.class);
 
     @Template("<div class=\"tooltipable\" data-contact-id=\"{1}\">{0}</div>")
