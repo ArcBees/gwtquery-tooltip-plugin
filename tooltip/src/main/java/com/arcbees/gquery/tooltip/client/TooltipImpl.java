@@ -1,3 +1,19 @@
+/**
+ * Copyright 2013 ArcBees Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
+
 package com.arcbees.gquery.tooltip.client;
 
 import com.arcbees.gquery.tooltip.client.TooltipOptions.TooltipPlacement;
@@ -94,12 +110,13 @@ public class TooltipImpl {
         Element target = e.getCurrentEventTarget().cast();
         final TooltipImpl impl = getImpl(target, delegateOptions);
 
+        impl.cancelTimer();
+
         if (impl.options.getDelayShow() == 0) {
             impl.show();
             return;
         }
 
-        impl.cancelTimer();
         impl.setHover(true);
 
         Timer timer = new Timer() {
