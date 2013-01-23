@@ -475,7 +475,7 @@ public class TooltipImpl {
     private void unbind() {
         if (options.getSelector() != null) {
             //TODO we should add a namespace, but die doesn't support it yet
-            $element.die(".tooltip");
+            $element.undelegate(options.getSelector(), ".tooltip");
         } else {
             $element.unbind(".tooltip");
         }
