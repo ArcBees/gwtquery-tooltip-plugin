@@ -119,7 +119,7 @@
         </plugins>
     </build>
 
-    <repositories>    
+<!--     <repositories>    
         <repository>
             <id>site</id>
             <url>http://gwtquery.googlecode.com/svn/mavenrepo</url>
@@ -128,7 +128,7 @@
             <id>m.g.o</id>
             <url>http://maven.glassfish.org/content/groups/public/</url>
         </repository>
-    </repositories>
+    </repositories> -->
 
     <pluginRepositories>
         <pluginRepository>
