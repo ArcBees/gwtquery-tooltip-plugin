@@ -15,7 +15,6 @@
   ~ the License.
   -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
@@ -26,7 +25,7 @@
 
     <groupId>com.arcbees.gquery</groupId>
     <artifactId>gquery-plugins</artifactId>
-    <version>0.1-alpha-12-SNAPSHOT</version>
+    <version>0.1-alpha-13-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <modules>
@@ -79,10 +78,11 @@
 
     <properties>
         <!-- client -->
-        <gquery.version>1.2.1-SNAPSHOT</gquery.version>
+        <gquery.version>1.3.1</gquery.version>
         <gwt.version>2.5.0</gwt.version>
         <gwt.maven.version>2.5.0</gwt.maven.version>
         <gwt.style>OBF</gwt.style>
+        <junit.version>4.11</junit.version>
 
         <!-- maven -->
         <target.jdk>1.6</target.jdk>
@@ -118,35 +118,12 @@
             </plugin>
         </plugins>
     </build>
-
-    <repositories>
-        <repository>
-            <id>central</id>
-            <url>http://repo1.maven.org/maven2</url>
-        </repository>
-        <repository>
-            <id>site</id>
-            <url>http://gwtquery.googlecode.com/svn/mavenrepo</url>
-        </repository>
-        <repository>
-            <id>m.g.o</id>
-            <url>http://maven.glassfish.org/content/groups/public/</url>
-        </repository>
-    </repositories>
-
-    <pluginRepositories>
-        <pluginRepository>
-            <id>gcupload</id>
-            <name>Repository for gcupload plugin</name>
-            <url>http://gwtupload.googlecode.com/svn/mavenrepo</url>
-        </pluginRepository>
-    </pluginRepositories>
-
+    
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>3.8.1</version>
+            <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
