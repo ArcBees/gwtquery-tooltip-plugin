@@ -9,7 +9,7 @@
   </tr>
   <tr>
     <td><a href="https://github.com/ArcBees/ArcBees-GQuery-Plugins/tree/master/tooltip">Tooltip</a></td>
-    <td><a href="http://arcbees.github.com/ArcBees-GQuery-Plugins/tooltip/"></a>Demo & Docs</td>
+    <td><a href="http://arcbees.github.com/ArcBees-GQuery-Plugins/tooltip/">Demo & Docs</a></td>
     <td><a href="https://github.com/ArcBees/ArcBees-GQuery-Plugins/tree/master/tooltip-sample/src/main/java/com/arcbees/gquery/tooltip/client">Source</a></td>
   </tr>
 </table>
