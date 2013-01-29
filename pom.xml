@@ -25,7 +25,7 @@
 
     <groupId>com.arcbees.gquery</groupId>
     <artifactId>gquery-plugins</artifactId>
-    <version>0.1-alpha-12</version>
+    <version>0.1-alpha-13-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <modules>
