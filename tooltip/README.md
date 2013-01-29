@@ -1,6 +1,9 @@
 #GQuery Plugin Tooltip
 This is the plugin Tooltip for GwtQuery Library.
 
+##Documentation
+[Documentation and Example Use](http://arcbees.github.com/ArcBees-GQuery-Plugins/tooltip/)
+
 ##Maven Use
 Use our snapshots repository until we release
 
