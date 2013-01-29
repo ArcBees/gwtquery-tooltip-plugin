@@ -83,6 +83,7 @@
         <gwt.version>2.5.0</gwt.version>
         <gwt.maven.version>2.5.0</gwt.maven.version>
         <gwt.style>OBF</gwt.style>
+        <junit.version>4.11</junit.version>
 
         <!-- maven -->
         <target.jdk>1.6</target.jdk>
@@ -119,30 +120,34 @@
         </plugins>
     </build>
 
-<!--     <repositories>    
+    <!-- <repositories>    
         <repository>
+            <id>central</id>
+            <url>https://oss.sonatype.org/content/groups/public/</url>
+        </repository>
+                 <repository>
             <id>site</id>
             <url>http://gwtquery.googlecode.com/svn/mavenrepo</url>
         </repository>
         <repository>
             <id>m.g.o</id>
             <url>http://maven.glassfish.org/content/groups/public/</url>
-        </repository>
-    </repositories> -->
+        </repository> 
+    </repositories>  -->
 
-    <pluginRepositories>
+    <!-- <pluginRepositories>
         <pluginRepository>
             <id>gcupload</id>
             <name>Repository for gcupload plugin</name>
             <url>http://gwtupload.googlecode.com/svn/mavenrepo</url>
         </pluginRepository>
-    </pluginRepositories>
-
+    </pluginRepositories> -->
+    
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>3.8.1</version>
+            <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
