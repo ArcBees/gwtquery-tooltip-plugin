@@ -285,7 +285,12 @@ public class TooltipImpl {
                 break;
         }
 
-        //TODO use GQuery.offset() method when it will be implemented
+        Offset additionalOffset = getAdditionalOffset();
+        if (additionalOffset != null) {
+            finalTop += additionalOffset.top;
+            finalLeft += additionalOffset.left;
+        }
+
         tooltip.offset((int) finalTop, (int) finalLeft);
         tooltip.addClass(placementClass)
                 .addClass(style.in());
@@ -328,6 +333,14 @@ public class TooltipImpl {
             $element.attr(DATA_TITLE_ATTRIBUTE, title);
             $element.get(0).removeAttribute(TITLE_ATTRIBUTE);
         }
+    }
+
+    private Offset getAdditionalOffset() {
+        if (options.getOffsetProvider() != null) {
+            return options.getOffsetProvider().getOffset($element.get(0));
+        }
+
+        return options.getOffset();
     }
 
     private TooltipOptions getOptions(TooltipOptions initialOptions) {
