@@ -25,11 +25,13 @@ import com.arcbees.gquery.tooltip.client.contactcell.ContactDatabase;
 import com.arcbees.gquery.tooltip.client.contactcell.ContactDatabase.ContactInfo;
 import com.arcbees.gquery.tooltip.client.contactcell.ContactTemplates;
 import com.arcbees.gquery.tooltip.client.contactcell.ContactTooltipResources;
+import com.arcbees.gquery.tooltip.client.resource.OffsetTooltipResources;
 import com.arcbees.gquery.tooltip.client.resource.ValidationTooltipResources;
 import com.arcbees.gquery.tooltip.client.widget.RichTextToolbar;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.query.client.Function;
+import com.google.gwt.query.client.GQuery;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.user.client.ui.AbstractImagePrototype;
 import com.google.gwt.user.client.ui.RichTextArea;
@@ -73,6 +75,10 @@ public class TooltipDocumentation implements EntryPoint {
                                 .length];
                     }
                 }).withContent("Placement is dynamic"));
+
+        $("#offsetTooltip").as(Tooltip).tooltip(new TooltipOptions().withOffset(new GQuery.Offset(-110, 0))
+                .withResources(OffsetTooltipResources.INSTANCE)
+                .withContent("We override the resources file in order to move the arrow to the right"));
     }
 
     private void setupCellListTooltip() {
