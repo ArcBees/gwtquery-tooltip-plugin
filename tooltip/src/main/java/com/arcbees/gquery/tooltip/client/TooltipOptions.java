@@ -17,6 +17,7 @@
 package com.arcbees.gquery.tooltip.client;
 
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.query.client.GQuery;
 import com.google.gwt.safehtml.shared.SafeHtml;
 
 public class TooltipOptions {
@@ -37,6 +38,10 @@ public class TooltipOptions {
         TooltipPlacement getPlacement(Element element);
     }
 
+    public interface TooltipOffsetProvider {
+        GQuery.Offset getOffset(Element element);
+    }
+
     private static boolean globalAnimation;
     private static String globalContainer;
     private static String globalContent;
@@ -50,6 +55,8 @@ public class TooltipOptions {
     private static String globalSelector;
     private static SafeHtml globalTemplate;
     private static TooltipTrigger globalTrigger;
+    private static GQuery.Offset globalOffset;
+    private static TooltipOffsetProvider globalOffsetProvider;
 
     public static void setGlobalAnimation(boolean globalAnimation) {
         TooltipOptions.globalAnimation = globalAnimation;
@@ -77,6 +84,14 @@ public class TooltipOptions {
 
     public static void setGlobalHtml(boolean globalHtml) {
         TooltipOptions.globalHtml = globalHtml;
+    }
+
+    public static void setGlobalOffset(GQuery.Offset globalOffset) {
+        TooltipOptions.globalOffset = globalOffset;
+    }
+
+    public static void setGlobalOffsetProvider(TooltipOffsetProvider globalOffsetProvider) {
+        TooltipOptions.globalOffsetProvider = globalOffsetProvider;
     }
 
     public static void setGlobalPlacement(TooltipPlacement globalPlacement) {
@@ -126,6 +141,8 @@ public class TooltipOptions {
     private String selector;
     private SafeHtml template;
     private TooltipTrigger trigger;
+    private GQuery.Offset offset;
+    private TooltipOffsetProvider offsetProvider;
 
     public TooltipOptions() {
     }
@@ -144,59 +161,69 @@ public class TooltipOptions {
             delayShow = options.getDelayShow();
             delayHide = options.getDelayHide();
             resources = options.getResources();
+            offset = options.getOffset();
+            offsetProvider = options.getOffsetProvider();
         }
     }
 
     public String getContainer() {
-        return container != null ? container : globalContainer;
+        return getFirstOr(container, globalContainer);
     }
 
     public String getContent() {
-        return content != null ? content : globalContent;
+        return getFirstOr(content, globalContent);
     }
 
     public TooltipContentProvider getContentProvider() {
-        return contentProvider != null ? contentProvider : globalContentProvider;
+        return getFirstOr(contentProvider, globalContentProvider);
     }
 
     public int getDelayHide() {
-        return delayHide != null ? delayHide : globalDelayHide;
+        return getFirstOr(delayHide, globalDelayHide);
     }
 
     public int getDelayShow() {
-        return delayShow != null ? delayShow : globalDelayShow;
+        return getFirstOr(delayShow, globalDelayShow);
+    }
+
+    public GQuery.Offset getOffset() {
+        return getFirstOr(offset, globalOffset);
+    }
+
+    public TooltipOffsetProvider getOffsetProvider() {
+        return getFirstOr(offsetProvider, globalOffsetProvider);
     }
 
     public TooltipPlacement getPlacement() {
-        return placement != null ? placement : globalPlacement;
+        return getFirstOr(placement, globalPlacement);
     }
 
     public TooltipPlacementProvider getPlacementProvider() {
-        return placementProvider != null ? placementProvider : globalPlacementProvider;
+        return getFirstOr(placementProvider, globalPlacementProvider);
     }
 
     public TooltipResources getResources() {
-        return resources != null ? resources : globalResources;
+        return getFirstOr(resources, globalResources);
     }
 
     public String getSelector() {
-        return selector != null ? selector : globalSelector;
+        return getFirstOr(selector, globalSelector);
     }
 
     public SafeHtml getTemplate() {
-        return template != null ? template : globalTemplate;
+        return getFirstOr(template, globalTemplate);
     }
 
     public TooltipTrigger getTrigger() {
-        return trigger != null ? trigger : globalTrigger;
+        return getFirstOr(trigger, globalTrigger);
     }
 
     public boolean isAnimation() {
-        return animation != null ? animation : globalAnimation;
+        return getFirstOr(animation, globalAnimation);
     }
 
     public boolean isHtml() {
-        return html != null ? html : globalHtml;
+        return getFirstOr(html, globalHtml);
     }
 
     /**
@@ -302,6 +329,26 @@ public class TooltipOptions {
     }
 
     /**
+     * Offset to apply to the tooltip's position.
+     *
+     * @param offset
+     */
+    public TooltipOptions withOffset(GQuery.Offset offset) {
+        this.offset = offset;
+        return this;
+    }
+
+    /**
+     * Offset to apply to the tooltip's position.
+     *
+     * @param offsetProvider
+     */
+    public TooltipOptions withOffsetProvider(TooltipOffsetProvider offsetProvider) {
+        this.offsetProvider = offsetProvider;
+        return this;
+    }
+
+    /**
      * How to position the tooltip
      *
      * @param placement
@@ -359,5 +406,9 @@ public class TooltipOptions {
     public TooltipOptions withTrigger(TooltipTrigger trigger) {
         this.trigger = trigger;
         return this;
+    }
+
+    private <T> T getFirstOr(T first, T global) {
+        return first != null ? first : global;
     }
 }
