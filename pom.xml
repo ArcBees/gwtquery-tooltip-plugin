@@ -39,6 +39,17 @@
 
     <developers>
         <developer>
+            <id>jDramaix</id>
+            <name>Julien Dramaix</name>
+            <email>julien.dramaix@gmail.com</email>
+            <organization>ArcBees</organization>
+            <organizationUrl>http://arcbees.com</organizationUrl>
+            <roles>
+                <role>Lead developer</role>
+            </roles>
+            <timezone>+1</timezone>
+        </developer>
+        <developer>
             <id>branflake2267</id>
             <name>Brandon Donnelson</name>
             <email>branflake2267@gmail.com</email>
