@@ -6,11 +6,13 @@
     <th>Plugin</th>
     <th>Demo</th>
     <th>Demo Source</th>
+    <th>Javadocs</th>
   </tr>
   <tr>
     <td><a href="https://github.com/ArcBees/ArcBees-GQuery-Plugins/tree/master/tooltip">Tooltip Home</a></td>
-    <td><a href="http://arcbees.github.com/ArcBees-GQuery-Plugins/tooltip/">Demo & Docs</a></td>
+    <td><a href="http://arcbees.github.com/ArcBees-GQuery-Plugins/">Demo & Docs</a></td>
     <td><a href="https://github.com/ArcBees/ArcBees-GQuery-Plugins/tree/master/tooltip-sample/src/main/java/com/arcbees/gquery/tooltip/client">Source</a></td>
+    <td><a href="http://arcbees.github.com/ArcBees-GQuery-Plugins/javadoc/apidocs/">Javadocs</a></td>
   </tr>
 </table>
 
