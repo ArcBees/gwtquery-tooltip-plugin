@@ -162,7 +162,7 @@
                 <artifactId>site-maven-plugin</artifactId>
                 <version>${github.version}</version>
                 <configuration>
-                    <dryRun>true</dryRun>
+                    <!-- <dryRun>true</dryRun> -->
                     <message>Creating site for ${project.version}</message>
                     <!-- github > sets the ~/.m2/setting.xml server id profile -->
                     <server>github</server>
@@ -172,8 +172,8 @@
                         <exclude>*.sh</exclude>
                         <exclude>options</exclude>
                         <exclude>packages</exclude>
-                        <exclude>WEB-INF/*</exclude>
-                        <exclude>META-INF/*</exclude>
+                        <exclude>WEB-INF/**</exclude>
+                        <exclude>META-INF/**</exclude>
                     </excludes>
                     <force>true</force>
                     <merge>true</merge>
