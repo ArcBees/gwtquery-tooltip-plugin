@@ -1,7 +1,8 @@
 *.iml
-.idea**
-target**
+.idea
+target
 .project
-.settings**
+.settings
 .classpath
-
+www-test
+.gwt
