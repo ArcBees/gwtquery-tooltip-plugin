@@ -12,20 +12,13 @@
     <name>Tooltip gQuery plugin example</name>
     <artifactId>tooltip-sample</artifactId>
     <packaging>war</packaging>
+    
+    <properties>
+        <webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
+    </properties>
 
     <build>
-        <resources>
-            <resource>
-                <directory>src/main/java</directory>
-                <includes>
-                    <include>**/*.java</include>
-                    <include>**/*.gwt.xml</include>
-                </includes>
-            </resource>
-            <resource>
-                <directory>src/main/resources</directory>
-            </resource>
-        </resources>
+        <outputDirectory>${webappDirectory}/WEB-INF/classes</outputDirectory>
 
         <plugins>
             <!-- JUnit Testing -->
@@ -45,36 +38,36 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>gwt-maven-plugin</artifactId>
-                <version>${gwt.maven.version}</version>
                 <configuration>
-                    <extraJvmArgs>-Xss1024k -Xmx512M</extraJvmArgs>
-                    <!-- Far faster to use suite when their are many tests -->
-                    <!-- <includes>**/*GwtTestSuite.java</includes> -->
-                    <!-- <excludes>**/*GwtTest.java</excludes> -->
-                    <includes>**/*GwtTest.java</includes>
-                    <mode>htmlunit</mode>
-                    <testTimeOut>180</testTimeOut>
-
-                    <strict>true</strict>
-                    <style>${gwt.style}</style>
-
-                    <compileSourcesArtifacts>
-                        <compileSourcesArtifact>com.arcbees.gquery.tooltip:Tooltip</compileSourcesArtifact>
-                    </compileSourcesArtifacts>
+                    <hostedWebapp>${webappDirectory}</hostedWebapp>
+                    <copyWebapp>true</copyWebapp>
+                
+                    <runTarget>index.html</runTarget>
+                    <module>com.arcbees.gquery.tooltip.TooltipSample</module>
                 </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>compile</goal>
-                            <goal>test</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
+            </plugin>
+            
+            <!-- Copy static web files for deploying to Github -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>2.3</version>
+                <executions>
+                    <execution>
+                        <phase>site</phase>
+                        <goals>
+                            <goal>exploded</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <webappDirectory>${project.parent.basedir}/target/site</webappDirectory>
+                </configuration>
             </plugin>
         </plugins>
     </build>
@@ -95,13 +88,13 @@
         <dependency>
             <groupId>com.googlecode.gwtquery</groupId>
             <artifactId>gwtquery</artifactId>
-            <scope>provided</scope>
             <version>${gquery.version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.arcbees.gquery</groupId>
             <artifactId>tooltip</artifactId>
-            <version>0.1-alpha-13-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 </project>

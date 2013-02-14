@@ -14,6 +14,11 @@
   </tr>
 </table>
 
+##Contributor
+
+###Deploying
+* Deploying Javadocs and site to GitHub use `mvn clean package site`
+
 ##Thanks to
 [![Arcbees.com](http://arcbees-ads.appspot.com/ad.png)](http://arcbees.com)
 

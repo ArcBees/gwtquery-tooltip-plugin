@@ -39,36 +39,12 @@
                 </configuration>
             </plugin>
 
-            <!-- GWT -->
-            <!-- run 'mvn integration-test' for running the GwtTestSuite -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>gwt-maven-plugin</artifactId>
-                <version>${gwt.maven.version}</version>
                 <configuration>
-                    <extraJvmArgs>-Xss1024k -Xmx1024m -XX:MaxPermSize=256m</extraJvmArgs>
-                    <!-- Far faster to use suite when their are many tests -->
-                    <!-- <includes>**/*GwtTestSuite.java</includes> -->
-                    <!-- <excludes>**/*GwtTest.java</excludes> -->
-                    <includes>**/*GwtTest.java</includes>
-                    <mode>htmlunit</mode>
-                    <testTimeOut>180</testTimeOut>
-
-                    <strict>true</strict>
-                    <style>${gwt.style}</style>
-
-                    <compileSourcesArtifacts>
-                        <compileSourcesArtifact>com.arcbees.gquery.tooltip:Tooltip</compileSourcesArtifact>
-                    </compileSourcesArtifacts>
+                    <module>com.arcbees.gquery.tooltip.Tooltip</module>
                 </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>compile</goal>
-                            <goal>test</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
 
             <plugin>
@@ -94,8 +70,8 @@
         <dependency>
             <groupId>com.googlecode.gwtquery</groupId>
             <artifactId>gwtquery</artifactId>
-            <scope>provided</scope>
             <version>${gquery.version}</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>

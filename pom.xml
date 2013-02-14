@@ -16,6 +16,7 @@
 
     <modules>
         <module>tooltip</module>
+        <module>tooltip-sample</module>
     </modules>
 
     <name>ArcBees GQuery Plugins</name>
@@ -77,9 +78,12 @@
         <!-- client -->
         <gquery.version>1.3.1</gquery.version>
         <gwt.version>2.5.0</gwt.version>
-        <gwt.maven.version>2.5.0</gwt.maven.version>
         <gwt.style>OBF</gwt.style>
         <junit.version>4.11</junit.version>
+
+        <gwt.maven.version>2.5.0</gwt.maven.version>
+        <maven-javadoc-plugin.version>2.9</maven-javadoc-plugin.version>
+        <github.version>0.7</github.version>
 
         <!-- maven -->
         <target.jdk>1.6</target.jdk>
@@ -113,7 +117,105 @@
                     <arguments>-Psonatype-oss-release -Prelease -Dgpg.passphrase=${gpg.passphrase}</arguments>
                 </configuration>
             </plugin>
+
+            <!-- run 'mvn javadoc:aggregate' to generate -->
+            <!-- run 'mvn javadoc:aggregate -X' to debug -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>${maven-javadoc-plugin.version}</version>
+                <configuration>
+                    <maxmemory>2048</maxmemory>
+                    <failOnError>true</failOnError>
+                    <doctitle>ArcBees GQuery Tooltip Javadocs</doctitle>
+                    <links>
+                        <link>http://download.oracle.com/javase/6/docs/api/</link>
+                        <link>http://google-web-toolkit.googlecode.com/svn/javadoc/latest/</link>
+                        <link>http://gwtquery.googlecode.com/svn/trunk/gwtquery-core/javadoc/</link>
+                    </links>
+                    <outputDirectory>${project.build.directory}/javadoc</outputDirectory>
+                    <reportOutputDirectory>${project.reporting.outputDirectory}/javadoc</reportOutputDirectory>
+                    <excludes>
+                        <exclude>**/*.txt</exclude>
+                    </excludes>
+                    <header>
+                        <![CDATA[
+                            <a href="https://github.com/ArcBees/ArcBees-GQuery-Plugins" target="_blank">ArcBees GQuery Plugins</a>
+                        ]]>
+                    </header>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>build-upload-javadocs</id>
+                        <phase>site</phase>
+                        <goals>
+                            <goal>aggregate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- run 'mvn site' to upload -->
+            <!-- run 'mvn site -X' to debug and upload. -->
+            <plugin>
+                <groupId>com.github.github</groupId>
+                <artifactId>site-maven-plugin</artifactId>
+                <version>${github.version}</version>
+                <configuration>
+                    <dryRun>true</dryRun>
+                    <message>Creating site for ${project.version}</message>
+                    <!-- github > sets the ~/.m2/setting.xml server id profile -->
+                    <server>github</server>
+                    <outputDirectory>${project.build.directory}/site</outputDirectory>
+                    <excludes>
+                        <exclude>*.DS_Store</exclude>
+                        <exclude>*.sh</exclude>
+                        <exclude>options</exclude>
+                        <exclude>packages</exclude>
+                        <exclude>WEB-INF/*</exclude>
+                        <exclude>META-INF/*</exclude>
+                    </excludes>
+                    <force>true</force>
+                    <merge>true</merge>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>site</phase>
+                        <goals>
+                            <goal>site</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
+
+        <pluginManagement>
+            <plugins>
+                <!-- GWT -->
+                <!-- run 'mvn integration-test' for running the GwtTestSuite -->
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>gwt-maven-plugin</artifactId>
+                    <version>${gwt.maven.version}</version>
+                    <configuration>
+                        <extraJvmArgs>-Xss1024k -Xmx1024m -XX:MaxPermSize=256m</extraJvmArgs>
+                        <includes>**/*GwtTest.java</includes>
+                        <mode>htmlunit</mode>
+                        <testTimeOut>180</testTimeOut>
+                        <strict>true</strict>
+                        <style>${gwt.style}</style>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>compile</goal>
+                                <goal>test</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </pluginManagement>
     </build>
 
     <dependencies>
