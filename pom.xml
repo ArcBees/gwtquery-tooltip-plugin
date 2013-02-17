@@ -165,7 +165,6 @@
                     <message>Creating site for ${project.version}</message>
                     <!-- github > sets the ~/.m2/setting.xml server id profile -->
                     <server>github</server>
-                    <outputDirectory>${project.build.directory}/site</outputDirectory>
                     <excludes>
                         <exclude>*.DS_Store</exclude>
                         <exclude>*.sh</exclude>

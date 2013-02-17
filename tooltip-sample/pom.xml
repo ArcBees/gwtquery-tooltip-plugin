@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
@@ -11,7 +12,7 @@
     <name>Tooltip gQuery plugin example</name>
     <artifactId>tooltip-sample</artifactId>
     <packaging>war</packaging>
-    
+
     <properties>
         <webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
     </properties>
@@ -40,7 +41,7 @@
                 <configuration>
                     <hostedWebapp>${webappDirectory}</hostedWebapp>
                     <copyWebapp>true</copyWebapp>
-                
+
                     <runTarget>index.html</runTarget>
                     <module>com.arcbees.gquery.tooltip.TooltipSample</module>
                 </configuration>
@@ -50,22 +51,14 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
             </plugin>
-            
-            <!-- Copy static web files for deploying to Github -->
+
+            <!-- run 'mvn site' to upload -->
+            <!-- run 'mvn site -X' to debug and upload. -->
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <version>2.3</version>
-                <executions>
-                    <execution>
-                        <phase>site</phase>
-                        <goals>
-                            <goal>exploded</goal>
-                        </goals>
-                    </execution>
-                </executions>
+                <groupId>com.github.github</groupId>
+                <artifactId>site-maven-plugin</artifactId>
                 <configuration>
-                    <webappDirectory>${basedir}/target/site</webappDirectory>
+                    <outputDirectory>${webappDirectory}</outputDirectory>
                 </configuration>
             </plugin>
         </plugins>
