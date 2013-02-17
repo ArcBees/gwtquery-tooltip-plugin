@@ -1,0 +1,32 @@
+-classpath
+'/Users/branflake2267/git/ArcBees-GQuery-Plugins/target/classes:/Users/branflake2267/git/ArcBees-GQuery-Plugins/tooltip/target/classes:/Users/branflake2267/git/ArcBees-GQuery-Plugins/tooltip-sample/target/tooltip-sample-0.1-alpha-14-SNAPSHOT/WEB-INF/classes:/Users/branflake2267/.m2/repository/org/json/json/20090211/json-20090211.jar:/Users/branflake2267/.m2/repository/com/googlecode/gwtquery/gwtquery/1.3.1/gwtquery-1.3.1.jar:/Users/branflake2267/.m2/repository/javax/validation/validation-api/1.0.0.GA/validation-api-1.0.0.GA.jar:/Users/branflake2267/.m2/repository/com/google/gwt/gwt-user/2.5.0/gwt-user-2.5.0.jar:/Users/branflake2267/.m2/repository/javax/validation/validation-api/1.0.0.GA/validation-api-1.0.0.GA-sources.jar:/Users/branflake2267/.m2/repository/com/arcbees/gquery/tooltip/0.1-alpha-14-SNAPSHOT/tooltip-0.1-alpha-14-SNAPSHOT.jar'
+-encoding
+'UTF-8'
+-protected
+-sourcepath
+'/Users/branflake2267/git/ArcBees-GQuery-Plugins/tooltip/src/main/java:/Users/branflake2267/git/ArcBees-GQuery-Plugins/tooltip-sample/src/main/java'
+-author
+-bottom
+'Copyright &#169; 2012-2013 <a href="http://arcbees.com">ArcBees</a>. All Rights Reserved.'
+-charset
+'UTF-8'
+-d
+'/Users/branflake2267/git/ArcBees-GQuery-Plugins/target/site/javadoc/apidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'ArcBees GQuery Tooltip Javadocs'
+-header
+'<a href="https://github.com/ArcBees/ArcBees-GQuery-Plugins" target="_blank">ArcBees GQuery Plugins</a>'
+-link
+'http://download.oracle.com/javase/6/docs/api'
+-link
+'http://google-web-toolkit.googlecode.com/svn/javadoc/latest'
+-link
+'http://gwtquery.googlecode.com/svn/trunk/gwtquery-core/javadoc'
+-linkoffline
+'http://docs.oracle.com/javase/6/docs/api' '/Users/branflake2267/git/ArcBees-GQuery-Plugins/target/javadoc-bundle-options'
+-use
+-version
+-windowtitle
+'ArcBees GQuery Plugins 0.1-alpha-14-SNAPSHOT API'
