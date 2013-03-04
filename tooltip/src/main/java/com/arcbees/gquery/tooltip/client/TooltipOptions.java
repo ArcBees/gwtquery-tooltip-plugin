@@ -19,6 +19,7 @@ package com.arcbees.gquery.tooltip.client;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.query.client.GQuery;
 import com.google.gwt.safehtml.shared.SafeHtml;
+import com.google.gwt.user.client.ui.Widget;
 
 public class TooltipOptions {
 
@@ -270,6 +271,22 @@ public class TooltipOptions {
      */
     public TooltipOptions withContent(TooltipContentProvider contentProvider) {
         this.contentProvider = contentProvider;
+        return this;
+    }
+
+    /**
+     * Set a widget as the content of the tooltip
+     *
+     * @param widget
+     */
+    public TooltipOptions withContent(Widget widget) {
+        withHtml(true);
+        if (widget == null || widget.getElement() == null) {
+            this.content = "";
+        } else {
+            this.content = widget.getElement().getString();
+        }
+
         return this;
     }
 
