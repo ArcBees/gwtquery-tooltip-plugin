@@ -19,10 +19,10 @@ package com.arcbees.gquery.tooltip.client;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.query.client.GQuery;
 import com.google.gwt.safehtml.shared.SafeHtml;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
 public class TooltipOptions {
-
     public enum TooltipPlacement {
         TOP, BOTTOM, LEFT, RIGHT;
     }
@@ -58,6 +58,7 @@ public class TooltipOptions {
     private static TooltipTrigger globalTrigger;
     private static GQuery.Offset globalOffset;
     private static TooltipOffsetProvider globalOffsetProvider;
+    private static Widget globalWidget;
 
     public static void setGlobalAnimation(boolean globalAnimation) {
         TooltipOptions.globalAnimation = globalAnimation;
@@ -144,6 +145,7 @@ public class TooltipOptions {
     private TooltipTrigger trigger;
     private GQuery.Offset offset;
     private TooltipOffsetProvider offsetProvider;
+    private Widget contentWidget;
 
     public TooltipOptions() {
     }
@@ -164,6 +166,7 @@ public class TooltipOptions {
             resources = options.getResources();
             offset = options.getOffset();
             offsetProvider = options.getOffsetProvider();
+            contentWidget = options.getWidget();
         }
     }
 
@@ -227,6 +230,10 @@ public class TooltipOptions {
         return getFirstOr(html, globalHtml);
     }
 
+    public Widget getWidget() {
+        return getFirstOr(contentWidget, globalWidget);
+    }
+
     /**
      * Do we apply a css fade transition to the tooltip ?
      *
@@ -279,14 +286,17 @@ public class TooltipOptions {
      *
      * @param widget
      */
-    public TooltipOptions withContent(Widget widget) {
-        withHtml(true);
-        if (widget == null || widget.getElement() == null) {
-            this.content = "";
-        } else {
-            this.content = widget.getElement().getString();
-        }
+    public TooltipOptions withContent(IsWidget widget) {
+        return withContent(widget.asWidget());
+    }
 
+    /**
+     * Set a widget as the content of the tooltip
+     *
+     * @param widget
+     */
+    public TooltipOptions withContent(Widget widget) {
+        this.contentWidget = widget;
         return this;
     }
 

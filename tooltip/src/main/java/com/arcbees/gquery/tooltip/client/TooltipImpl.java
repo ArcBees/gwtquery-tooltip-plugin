@@ -20,7 +20,12 @@ import com.arcbees.gquery.tooltip.client.TooltipOptions.TooltipPlacement;
 import com.arcbees.gquery.tooltip.client.TooltipOptions.TooltipTrigger;
 import com.arcbees.gquery.tooltip.client.TooltipResources.TooltipStyle;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.query.client.Function;
 import com.google.gwt.query.client.GQuery;
 import com.google.gwt.query.client.GQuery.Offset;
@@ -28,6 +33,13 @@ import com.google.gwt.safehtml.client.SafeHtmlTemplates;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.ComplexPanel;
+import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.Panel;
+import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.SimplePanel;
 
 import static com.arcbees.gquery.tooltip.client.Tooltip.TOOLTIP_DATA_KEY;
 import static com.arcbees.gquery.tooltip.client.Tooltip.Tooltip;
@@ -186,6 +198,7 @@ public class TooltipImpl {
     private TooltipOptions options;
     private Timer timer;
     private TooltipStyle style;
+    private HTMLPanel widgetContainer;
 
     public TooltipImpl(Element element, TooltipOptions options) {
         this(element, options, getDefaultResources());
@@ -212,7 +225,7 @@ public class TooltipImpl {
     }
 
     public void hide() {
-        final GQuery tooltip = getTip();
+        GQuery tooltip = getTip();
 
         tooltip.removeClass(style.in());
 
@@ -220,11 +233,11 @@ public class TooltipImpl {
             tooltip.fadeOut(ANIMATION_DURATION, new Function() {
                 @Override
                 public void f() {
-                    tooltip.detach();
+                    detach();
                 }
             });
         } else {
-            tooltip.detach();
+            detach();
         }
     }
 
@@ -233,11 +246,9 @@ public class TooltipImpl {
 
         String title = getTitle();
 
-        if (!enabled || title == null || title.length() == 0) {
+        if (!enabled || (title == null && options.getWidget() == null) || (title != null && title.length() == 0)) {
             return;
         }
-
-        setContent(title);
 
         tooltip.detach()
                 .removeClass(style.in(), style.top(), style.bottom(), style.left(), style.right())
@@ -254,6 +265,8 @@ public class TooltipImpl {
         } else {
             tooltip.appendTo($(container));
         }
+
+        setContent(title);
 
         OffsetInfo oi = OffsetInfo.from($element);
         long actualWidth = tooltip.get(0).getOffsetWidth();
@@ -316,6 +329,14 @@ public class TooltipImpl {
             $element.delegate(options.getSelector(), eventType, callback);
         } else {
             $element.bind(eventType, callback);
+        }
+    }
+
+    private void detach() {
+        if (widgetContainer != null) {
+            $(widgetContainer).detach();
+        } else {
+            getTip().detach();
         }
     }
 
@@ -468,10 +489,15 @@ public class TooltipImpl {
 
     private void setContent(String title) {
         GQuery inner = getTip().find("." + style.tooltipInner());
-        if (options.isHtml()) {
-            inner.html(title);
+        if (options.getWidget() != null) {
+            widgetContainer = HTMLPanel.wrap(inner.get(0));
+            widgetContainer.add(options.getWidget());
         } else {
-            inner.text(title);
+            if (options.isHtml()) {
+                inner.html(title);
+            } else {
+                inner.text(title);
+            }
         }
     }
 

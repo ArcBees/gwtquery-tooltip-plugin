@@ -30,12 +30,20 @@ import com.arcbees.gquery.tooltip.client.resource.ValidationTooltipResources;
 import com.arcbees.gquery.tooltip.client.widget.RichTextToolbar;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.query.client.Function;
 import com.google.gwt.query.client.GQuery;
 import com.google.gwt.safehtml.shared.SafeHtml;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbstractImagePrototype;
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.RichTextArea;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.TextBox;
 
 import static com.arcbees.gquery.tooltip.client.Tooltip.Tooltip;
 import static com.google.gwt.query.client.GQuery.$;
@@ -87,17 +95,38 @@ public class TooltipDocumentation implements EntryPoint {
         RootPanel.get("contactCellList").add(ccl);
 
         TooltipOptions options = new TooltipOptions();
-        //provide dynamic content
-        options.withContent(new TooltipContentProvider() {
-            @Override
-            public String getContent(Element element) {
-                Integer id = Integer.parseInt(element.getAttribute("data-contact-id"));
-                ContactInfo contact = ContactDatabase.get().queryContactById(id);
 
-                return ContactTemplates.INSTANCE.contactCellTooltip(contactImage, contact.getFullName(),
-                        contact.getAddress()).asString();
+        Button button = new Button("Some button");
+        button.addMouseOverHandler(new MouseOverHandler() {
+            @Override
+            public void onMouseOver(MouseOverEvent event) {
+                Window.alert("over");
             }
         });
+        button.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                Window.alert("Clicked!");
+            }
+        });
+        HTMLPanel widget = new HTMLPanel("");
+        widget.setWidth("200px");
+        widget.getElement().getStyle().setZIndex(10000);
+        widget.add(button);
+
+        options.withContainer("element");
+        options.withContent(widget);
+        //provide dynamic content
+//        options.withContent(new TooltipContentProvider() {
+//            @Override
+//            public String getContent(Element element) {
+//                Integer id = Integer.parseInt(element.getAttribute("data-contact-id"));
+//                ContactInfo contact = ContactDatabase.get().queryContactById(id);
+//
+//                return ContactTemplates.INSTANCE.contactCellTooltip(contactImage, contact.getFullName(),
+//                        contact.getAddress()).asString();
+//            }
+//        });
 
         options.withResources(ContactTooltipResources.INSTANCE);
         options.withPlacement(TooltipPlacement.RIGHT);
