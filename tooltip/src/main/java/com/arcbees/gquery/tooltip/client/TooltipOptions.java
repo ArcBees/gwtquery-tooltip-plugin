@@ -120,6 +120,10 @@ public class TooltipOptions {
         TooltipOptions.globalTrigger = globalTrigger;
     }
 
+    public static void setGlobalWidget(IsWidget globalWidget) {
+        TooltipOptions.globalWidget = globalWidget.asWidget();
+    }
+
     static {
         //set default options globally
         globalAnimation = true;
@@ -287,16 +291,9 @@ public class TooltipOptions {
      * @param widget
      */
     public TooltipOptions withContent(IsWidget widget) {
-        return withContent(widget.asWidget());
-    }
-
-    /**
-     * Set a widget as the content of the tooltip
-     *
-     * @param widget
-     */
-    public TooltipOptions withContent(Widget widget) {
-        this.contentWidget = widget;
+        if (widget != null) {
+            this.contentWidget = widget.asWidget();
+        }
         return this;
     }
 

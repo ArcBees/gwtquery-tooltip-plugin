@@ -29,6 +29,7 @@ import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 import static com.arcbees.gquery.tooltip.client.Tooltip.TOOLTIP_DATA_KEY;
 import static com.arcbees.gquery.tooltip.client.Tooltip.Tooltip;
@@ -232,9 +233,7 @@ public class TooltipImpl {
     public void show() {
         GQuery tooltip = getTip();
 
-        String title = getTitle();
-
-        if (!enabled || (title == null && options.getWidget() == null) || (title != null && title.length() == 0)) {
+        if (!enabled || noContentInTooltip()) {
             return;
         }
 
@@ -254,7 +253,7 @@ public class TooltipImpl {
             tooltip.appendTo($(container));
         }
 
-        setContent(title);
+        setContent();
 
         OffsetInfo oi = OffsetInfo.from($element);
         long actualWidth = tooltip.get(0).getOffsetWidth();
@@ -322,6 +321,16 @@ public class TooltipImpl {
 
     private void detach() {
         getTip().detach();
+
+        Widget w = options.getWidget();
+        if (w != null && RootPanel.isInDetachList(w)) {
+            RootPanel.detachNow(w);
+        }
+    }
+
+    private boolean noContentInTooltip() {
+        String title = getTitle();
+        return (title == null && options.getWidget() == null) || (title != null && title.length() == 0);
     }
 
     private void cancelTimer() {
@@ -471,19 +480,31 @@ public class TooltipImpl {
         return result != null ? result : defaultData;
     }
 
-    private void setContent(String title) {
+    private void setContent() {
         GQuery inner = getTip().find("." + style.tooltipInner());
         if (options.getWidget() != null) {
-            RootPanel.get().add(options.getWidget());
-            RootPanel.get().getElement().removeChild(options.getWidget().getElement());
-            inner.get(0).appendChild(options.getWidget().getElement());
+            setWidgetContent(inner);
         } else {
-            if (options.isHtml()) {
-                inner.html(title);
-            } else {
-                inner.text(title);
-            }
+            setContent(inner);
         }
+    }
+
+    private void setContent(GQuery inner) {
+        String title = getTitle();
+        if (options.isHtml()) {
+            inner.html(title);
+        } else {
+            inner.text(title);
+        }
+    }
+
+    private void setWidgetContent(GQuery inner) {
+        String oldDisplay = options.getWidget().getElement().getStyle().getDisplay();
+        options.getWidget().getElement().getStyle().setProperty("display", "none");
+        RootPanel.get().add(options.getWidget());
+        RootPanel.get().getElement().removeChild(options.getWidget().getElement());
+        inner.get(0).appendChild(options.getWidget().getElement());
+        options.getWidget().getElement().getStyle().setProperty("display", oldDisplay);
     }
 
     private void setHover(boolean b) {
