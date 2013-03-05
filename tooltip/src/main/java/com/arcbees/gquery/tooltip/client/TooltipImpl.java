@@ -20,12 +20,7 @@ import com.arcbees.gquery.tooltip.client.TooltipOptions.TooltipPlacement;
 import com.arcbees.gquery.tooltip.client.TooltipOptions.TooltipTrigger;
 import com.arcbees.gquery.tooltip.client.TooltipResources.TooltipStyle;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.MouseOverEvent;
-import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.query.client.Function;
 import com.google.gwt.query.client.GQuery;
 import com.google.gwt.query.client.GQuery.Offset;
@@ -33,13 +28,7 @@ import com.google.gwt.safehtml.client.SafeHtmlTemplates;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Timer;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.ComplexPanel;
-import com.google.gwt.user.client.ui.HTMLPanel;
-import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
 
 import static com.arcbees.gquery.tooltip.client.Tooltip.TOOLTIP_DATA_KEY;
 import static com.arcbees.gquery.tooltip.client.Tooltip.Tooltip;
@@ -198,7 +187,6 @@ public class TooltipImpl {
     private TooltipOptions options;
     private Timer timer;
     private TooltipStyle style;
-    private HTMLPanel widgetContainer;
 
     public TooltipImpl(Element element, TooltipOptions options) {
         this(element, options, getDefaultResources());
@@ -333,11 +321,7 @@ public class TooltipImpl {
     }
 
     private void detach() {
-        if (widgetContainer != null) {
-            $(widgetContainer).detach();
-        } else {
-            getTip().detach();
-        }
+        getTip().detach();
     }
 
     private void cancelTimer() {
@@ -490,8 +474,9 @@ public class TooltipImpl {
     private void setContent(String title) {
         GQuery inner = getTip().find("." + style.tooltipInner());
         if (options.getWidget() != null) {
-            widgetContainer = HTMLPanel.wrap(inner.get(0));
-            widgetContainer.add(options.getWidget());
+            RootPanel.get().add(options.getWidget());
+            options.getWidget().getElement().getParentElement().removeChild(options.getWidget().getElement());
+            inner.get(0).appendChild(options.getWidget().getElement());
         } else {
             if (options.isHtml()) {
                 inner.html(title);
