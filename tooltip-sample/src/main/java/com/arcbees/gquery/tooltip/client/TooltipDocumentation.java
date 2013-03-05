@@ -87,6 +87,7 @@ public class TooltipDocumentation implements EntryPoint {
         RootPanel.get("contactCellList").add(ccl);
 
         TooltipOptions options = new TooltipOptions();
+
         //provide dynamic content
         options.withContent(new TooltipContentProvider() {
             @Override
