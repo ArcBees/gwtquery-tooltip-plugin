@@ -475,7 +475,7 @@ public class TooltipImpl {
         GQuery inner = getTip().find("." + style.tooltipInner());
         if (options.getWidget() != null) {
             RootPanel.get().add(options.getWidget());
-            options.getWidget().getElement().getParentElement().removeChild(options.getWidget().getElement());
+            RootPanel.get().getElement().removeChild(options.getWidget().getElement());
             inner.get(0).appendChild(options.getWidget().getElement());
         } else {
             if (options.isHtml()) {
