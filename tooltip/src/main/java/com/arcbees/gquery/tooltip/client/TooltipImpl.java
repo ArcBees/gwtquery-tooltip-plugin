@@ -499,12 +499,12 @@ public class TooltipImpl {
     }
 
     private void setWidgetContent(GQuery inner) {
-        String oldDisplay = options.getWidget().getElement().getStyle().getDisplay();
-        options.getWidget().getElement().getStyle().setProperty("display", "none");
+        Widget widget = options.getWidget();
+        String oldDisplay = $(widget).css("display");
+        $(widget).css("display", "none");
         RootPanel.get().add(options.getWidget());
         RootPanel.get().getElement().removeChild(options.getWidget().getElement());
-        inner.get(0).appendChild(options.getWidget().getElement());
-        options.getWidget().getElement().getStyle().setProperty("display", oldDisplay);
+        $(widget).appendTo(inner).css("display", oldDisplay);
     }
 
     private void setHover(boolean b) {
