@@ -317,7 +317,6 @@ public class TooltipOptions {
         return this;
     }
 
-
     /**
      * Html content of the tooltip, if <code>title</code> attribute doesn't exist on the element
      *
