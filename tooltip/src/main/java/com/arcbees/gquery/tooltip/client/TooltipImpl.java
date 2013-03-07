@@ -331,6 +331,7 @@ public class TooltipImpl {
 
         if (widget != null && RootPanel.isInDetachList(widget.asWidget())) {
             RootPanel.detachNow(widget.asWidget());
+            widget = null;
         }
     }
 
@@ -492,7 +493,10 @@ public class TooltipImpl {
         if (options.getWidget() != null) {
             setWidgetContent(options.getWidget(), inner);
         } else if (options.getWidgetContentProvider() != null) {
-            setWidgetContent(options.getWidgetContentProvider().getContent($element.widget()), inner);
+            if (widget == null) {
+                widget = options.getWidgetContentProvider().getContent($element.widget());
+                setWidgetContent(widget, inner);
+            }
         } else {
             setContent(inner);
         }
@@ -508,7 +512,6 @@ public class TooltipImpl {
     }
 
     private void setWidgetContent(IsWidget content, GQuery inner) {
-        widget = content;
         String oldDisplay = $(content).css("display");
         $(content).css("display", "none");
         RootPanel.get().add(content);
