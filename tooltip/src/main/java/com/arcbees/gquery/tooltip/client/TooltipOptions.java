@@ -35,6 +35,10 @@ public class TooltipOptions {
         String getContent(Element element);
     }
 
+    public interface TooltipWidgetContentProvider<T extends IsWidget> {
+        IsWidget getContent(T widgetElement);
+    }
+
     public interface TooltipPlacementProvider {
         TooltipPlacement getPlacement(Element element);
     }
@@ -150,6 +154,7 @@ public class TooltipOptions {
     private GQuery.Offset offset;
     private TooltipOffsetProvider offsetProvider;
     private Widget contentWidget;
+    private TooltipWidgetContentProvider widgetContentProvider;
 
     public TooltipOptions() {
     }
@@ -171,6 +176,7 @@ public class TooltipOptions {
             offset = options.getOffset();
             offsetProvider = options.getOffsetProvider();
             contentWidget = options.getWidget();
+            widgetContentProvider = options.getWidgetContentProvider();
         }
     }
 
@@ -238,6 +244,10 @@ public class TooltipOptions {
         return getFirstOr(contentWidget, globalWidget);
     }
 
+    public TooltipWidgetContentProvider getWidgetContentProvider() {
+        return widgetContentProvider;
+    }
+
     /**
      * Do we apply a css fade transition to the tooltip ?
      *
@@ -286,6 +296,16 @@ public class TooltipOptions {
     }
 
     /**
+     * Set the Object used for retrieving the content of the tooltip
+     *
+     * @param widgetContentProvider
+     */
+    public <T extends IsWidget> TooltipOptions withContent(TooltipWidgetContentProvider<T> widgetContentProvider) {
+        this.widgetContentProvider = widgetContentProvider;
+        return this;
+    }
+
+    /**
      * Set a widget as the content of the tooltip
      *
      * @param widget
@@ -296,6 +316,7 @@ public class TooltipOptions {
         }
         return this;
     }
+
 
     /**
      * Html content of the tooltip, if <code>title</code> attribute doesn't exist on the element

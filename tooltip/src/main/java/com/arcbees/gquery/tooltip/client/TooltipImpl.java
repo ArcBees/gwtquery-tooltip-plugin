@@ -28,6 +28,7 @@ import com.google.gwt.safehtml.client.SafeHtmlTemplates;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -188,6 +189,7 @@ public class TooltipImpl {
     private TooltipOptions options;
     private Timer timer;
     private TooltipStyle style;
+    private IsWidget widget;
 
     public TooltipImpl(Element element, TooltipOptions options) {
         this(element, options, getDefaultResources());
@@ -326,11 +328,16 @@ public class TooltipImpl {
         if (w != null && RootPanel.isInDetachList(w)) {
             RootPanel.detachNow(w);
         }
+
+        if (widget != null && RootPanel.isInDetachList(widget.asWidget())) {
+            RootPanel.detachNow(widget.asWidget());
+        }
     }
 
     private boolean noContentInTooltip() {
         String title = getTitle();
-        return (title == null && options.getWidget() == null) || (title != null && title.length() == 0);
+        return (title == null && options.getWidget() == null && options.getWidgetContentProvider() == null)
+                || (title != null && title.length() == 0);
     }
 
     private void cancelTimer() {
@@ -483,7 +490,9 @@ public class TooltipImpl {
     private void setContent() {
         GQuery inner = getTip().find("." + style.tooltipInner());
         if (options.getWidget() != null) {
-            setWidgetContent(inner);
+            setWidgetContent(options.getWidget(), inner);
+        } else if (options.getWidgetContentProvider() != null) {
+            setWidgetContent(options.getWidgetContentProvider().getContent($element.widget()), inner);
         } else {
             setContent(inner);
         }
@@ -498,13 +507,13 @@ public class TooltipImpl {
         }
     }
 
-    private void setWidgetContent(GQuery inner) {
-        Widget widget = options.getWidget();
-        String oldDisplay = $(widget).css("display");
-        $(widget).css("display", "none");
-        RootPanel.get().add(options.getWidget());
-        RootPanel.get().getElement().removeChild(options.getWidget().getElement());
-        $(widget).appendTo(inner).css("display", oldDisplay);
+    private void setWidgetContent(IsWidget content, GQuery inner) {
+        widget = content;
+        String oldDisplay = $(content).css("display");
+        $(content).css("display", "none");
+        RootPanel.get().add(content);
+        RootPanel.get().getElement().removeChild(content.asWidget().getElement());
+        $(content).appendTo(inner).css("display", oldDisplay);
     }
 
     private void setHover(boolean b) {
