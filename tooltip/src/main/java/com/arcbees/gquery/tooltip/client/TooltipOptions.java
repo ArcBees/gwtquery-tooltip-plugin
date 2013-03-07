@@ -35,8 +35,8 @@ public class TooltipOptions {
         String getContent(Element element);
     }
 
-    public interface TooltipWidgetContentProvider<T extends IsWidget> {
-        IsWidget getContent(T widgetElement);
+    public interface TooltipWidgetContentProvider {
+        IsWidget getContent(Element element);
     }
 
     public interface TooltipPlacementProvider {
@@ -300,7 +300,7 @@ public class TooltipOptions {
      *
      * @param widgetContentProvider
      */
-    public <T extends IsWidget> TooltipOptions withContent(TooltipWidgetContentProvider<T> widgetContentProvider) {
+    public TooltipOptions withContent(TooltipWidgetContentProvider widgetContentProvider) {
         this.widgetContentProvider = widgetContentProvider;
         return this;
     }

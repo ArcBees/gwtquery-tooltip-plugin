@@ -30,7 +30,6 @@ import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.Widget;
 
 import static com.arcbees.gquery.tooltip.client.Tooltip.TOOLTIP_DATA_KEY;
 import static com.arcbees.gquery.tooltip.client.Tooltip.Tooltip;
@@ -235,6 +234,7 @@ public class TooltipImpl {
     public void show() {
         GQuery tooltip = getTip();
 
+        assignWidget();
         if (!enabled || noContentInTooltip()) {
             return;
         }
@@ -321,13 +321,18 @@ public class TooltipImpl {
         }
     }
 
+    private void assignWidget() {
+        if (options.getWidget() != null) {
+            widget = options.getWidget();
+        } else if (options.getWidgetContentProvider() != null) {
+            if (widget == null) {
+                widget = options.getWidgetContentProvider().getContent($element.get(0));
+            }
+        }
+    }
+
     private void detach() {
         getTip().detach();
-
-        Widget w = options.getWidget();
-        if (w != null && RootPanel.isInDetachList(w)) {
-            RootPanel.detachNow(w);
-        }
 
         if (widget != null && RootPanel.isInDetachList(widget.asWidget())) {
             RootPanel.detachNow(widget.asWidget());
@@ -337,8 +342,7 @@ public class TooltipImpl {
 
     private boolean noContentInTooltip() {
         String title = getTitle();
-        return (title == null && options.getWidget() == null && options.getWidgetContentProvider() == null)
-                || (title != null && title.length() == 0);
+        return (title == null && widget == null) || (title != null && title.length() == 0);
     }
 
     private void cancelTimer() {
@@ -490,13 +494,8 @@ public class TooltipImpl {
 
     private void setContent() {
         GQuery inner = getTip().find("." + style.tooltipInner());
-        if (options.getWidget() != null) {
-            setWidgetContent(options.getWidget(), inner);
-        } else if (options.getWidgetContentProvider() != null) {
-            if (widget == null) {
-                widget = options.getWidgetContentProvider().getContent($element.widget());
-                setWidgetContent(widget, inner);
-            }
+        if (widget != null) {
+            setWidgetContent(inner);
         } else {
             setContent(inner);
         }
@@ -511,12 +510,12 @@ public class TooltipImpl {
         }
     }
 
-    private void setWidgetContent(IsWidget content, GQuery inner) {
-        String oldDisplay = $(content).css("display");
-        $(content).css("display", "none");
-        RootPanel.get().add(content);
-        RootPanel.get().getElement().removeChild(content.asWidget().getElement());
-        $(content).appendTo(inner).css("display", oldDisplay);
+    private void setWidgetContent(GQuery inner) {
+        String oldDisplay = $(widget).css("display");
+        $(widget).css("display", "none");
+        RootPanel.get().add(widget);
+        RootPanel.get().getElement().removeChild(widget.asWidget().getElement());
+        $(widget).appendTo(inner).css("display", oldDisplay);
     }
 
     private void setHover(boolean b) {
