@@ -234,6 +234,10 @@ public class TooltipImpl {
     public void show() {
         GQuery tooltip = getTip();
 
+        if (getTip().hasClass(style.in())) {
+            return;
+        }
+
         assignWidget();
         if (!enabled || noContentInTooltip()) {
             return;
@@ -324,19 +328,22 @@ public class TooltipImpl {
     private void assignWidget() {
         if (options.getWidget() != null) {
             widget = options.getWidget();
+            detachWidget();
         } else if (options.getWidgetContentProvider() != null) {
-            if (widget == null) {
-                widget = options.getWidgetContentProvider().getContent($element.get(0));
-            }
+            detachWidget();
+            widget = options.getWidgetContentProvider().getContent($element.get(0));
         }
     }
 
     private void detach() {
         getTip().detach();
+        detachWidget();
+    }
 
+    private void detachWidget() {
         if (widget != null && RootPanel.isInDetachList(widget.asWidget())) {
             RootPanel.detachNow(widget.asWidget());
-            widget = null;
+            $(widget.asWidget()).get(0).removeFromParent();
         }
     }
 
@@ -493,12 +500,16 @@ public class TooltipImpl {
     }
 
     private void setContent() {
-        GQuery inner = getTip().find("." + style.tooltipInner());
+        GQuery inner = getInner();
         if (widget != null) {
             setWidgetContent(inner);
         } else {
             setContent(inner);
         }
+    }
+
+    private GQuery getInner() {
+        return getTip().find("." + style.tooltipInner());
     }
 
     private void setContent(GQuery inner) {
@@ -513,9 +524,16 @@ public class TooltipImpl {
     private void setWidgetContent(GQuery inner) {
         String oldDisplay = $(widget).css("display");
         $(widget).css("display", "none");
-        RootPanel.get().add(widget);
-        RootPanel.get().getElement().removeChild(widget.asWidget().getElement());
+        attachWidget();
         $(widget).appendTo(inner).css("display", oldDisplay);
+    }
+
+    private void attachWidget() {
+        RootPanel.get().add(widget);
+        if (options.getWidgetContentProvider() != null) {
+            RootPanel.detachOnWindowClose(widget.asWidget());
+        }
+        RootPanel.get().getElement().removeChild(widget.asWidget().getElement());
     }
 
     private void setHover(boolean b) {
