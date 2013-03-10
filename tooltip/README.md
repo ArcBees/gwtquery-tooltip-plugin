@@ -14,7 +14,7 @@ Use our snapshots repository until we release
 <dependency>
     <groupId>com.arcbees.gquery</groupId>
     <artifactId>tooltip</artifactId>
-    <version>0.1-alpha-14</version>
+    <version>1.0</version>
 </dependency>
 ```
 
@@ -34,7 +34,7 @@ Use our snapshots repository until we release
 <dependency>
     <groupId>com.arcbees.gquery</groupId>
     <artifactId>tooltip</artifactId>
-    <version>0.1-alpha-14-SNAPSHOT</version>
+    <version>1.0-SNAPSHOT</version>
 </dependency>
 ```
 
