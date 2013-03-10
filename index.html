@@ -1,408 +1,134 @@
-<!doctype html>
-<!--
-  ~ Copyright 2013 ArcBees Inc.
-  ~
-  ~ Licensed under the Apache License, Version 2.0 (the "License"); you may not
-  ~ use this file except in compliance with the License. You may obtain a copy of
-  ~ the License at
-  ~
-  ~ http://www.apache.org/licenses/LICENSE-2.0
-  ~
-  ~ Unless required by applicable law or agreed to in writing, software
-  ~ distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
-  ~ WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
-  ~ License for the specific language governing permissions and limitations under
-  ~ the License.
-  -->
-
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <title>GwtQuery: Tooltip plugin example</title>
-    <link rel="stylesheet" href="bootstrap.min.css">
-    <link rel="stylesheet" href="style.css">
-    <script language="javascript" src="TooltipSample/TooltipSample.nocache.js"></script>
-</head>
-<body style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; margin-top:60px;">
-<a href="https://github.com/ArcBees/ArcBees-GQuery-Plugins/tree/master/tooltip">
-    <img style="position: absolute; top: 0; right: 0; border: 0;"
-         src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub">
-</a>
-
-<div class="container">
-<header class="header well">
-    <h1>GQuery Tooltip plugin</h1>
-
-    <p class="lead">This
-        <a href="http://gwtquery.com">GwtQuery</a> plugin allows you adding easily tooltip to any widget or dom
-        element.</p>
-</header>
-
-<section>
-    <div class="row">
-        <div class="span6">
-            <div class="page-header">
-                <h2>Examples with DOM elements</h2>
-            </div>
-            <p>
-                You have just to hover the links in the paragraph below to display the tooltip.
-                    <pre>
-//apply the plugin on all elements with an attribute rel="tooltip"
-$("[rel='tooltip']").as(Tooltip.Tooltip).tooltip();
-                    </pre>
-            </p>
-
-            <p>
-                <em>Integer <a href="javascript:" rel="tooltip" title="asset">dignissim</a> posuere nibh nec venenatis.
-                    Nullamalesuada augueid tortor vulputate a luctus libero imperdiet. Curabitur adipiscing elit
-                    <a href="javascript:" rel="tooltip" title="members">sodales</a> nisi ullamcorper vel malesuada lacus
-                    euismod.
-                    Praesent <a href="javascript:" rel="tooltip" title="services">sollicitudin</a> felis eget libero
-                    gravida
-                    auctor.Nunc facilisis, diam eu porta sollicitudin, metus nisl
-                    <a href="javascript:" rel="tooltip" title="drink">bibendum</a> magna, nec scelerisque dui mauris et
-                    lacus.
-                    Aliquam accumsan lorem nunc. Proin nunc enim, malesuada eget tempor non, rhoncus in elit. In
-                    sollicitudin condimentum lacus, non ullamcorper ipsum suscipit id. Morbi vitae risus ligula, vita
-                    e sodales eros. Curabitur at purus eget neque <a href="javascript:" rel="tooltip" title="arrows">sagittis</a>
-                    consequat. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per
-                    inceptos himenaeos. Curabitur nec felis vel massa dictum venenatis a tristique nunc.
-                    blop</em>
-            </p>
-        </div>
-        <div class="span6">
-
-            <div class="page-header">
-                <h2>... with widgets</h2>
-            </div>
-            <p>
-                Here are the <code>RichTextArea</code> and <code>RichTextToolbar</code> widgets used in the
-                <a href="http://gwt.googleusercontent.com/samples/Showcase/Showcase.html#!CwRichText">GWT showcase</a>
-                We just enhance the <code>RichTextToolbar</code> by adding nice tooltip for the icons.
-                    <pre>
-//apply tooltip plugin on element of the toolbar defining a title
-$("[title]", toolbar).as(Tooltip).tooltip();
-                    </pre>
-            </p>
-            <div id="widgetSample" class="rounded"></div>
-        </div>
-    </div>
-</section>
-<section>
-    <div class="row">
-        <div class="span12">
-            <div class="page-header">
-                <h2>Usage</h2>
-            </div>
-            <p>
-                TBC
-            </p>
-
-        </div>
-    </div>
-
-</section>
-
-<section>
-<div class="row">
-<div class="span12">
-    <div class="page-header">
-        <h2>Plugin configuration</h2><a name="options"></a>
-    </div>
-    <p>
-        The plugin is configurable. You just need to pass an instance of the <code>TooltipOptions</code>
-        class when you call the plugin :
-                    <pre>
-TooltipOptions options = new TooltipOptions().withDelayHide(100).withDelayShow(200).withPlacement(TooltipPlacement.LEFT);
-$("[title]", toolbar).as(Tooltip).tooltip(options);
-                    </pre>
-    </p>
-    <p>
-        Often, your tooltip will use always the same options. In order to avoid passing a same instance
-        of <code>TooltipOptions</code> when you call the plugin, you can define the default options used
-        by the plugins by calling static methods defined in the <code>TooltipOptions</code> class:
-                    <pre>
-TooltipOptions.setGlobalDelayHide(100);
-TooltipOptions.setGlobalDelayShow(200);
-TooltipOptions.setGlobalPlacement(TooltipPlacement.LEFT);
-...
-//no need anymore to pass an instance of TooltipOptions.
-$("[title]", toolbar).as(Tooltip).tooltip();
-                    </pre>
-    </p>
-
-    <p>
-        A third way to configure the tooltip plugin is to specify data-* attributes on the element:
-                    <pre>
-&lt;div id="tooltipable" data-tooltip-placement="LEFT" data-tooltip-delayShow="200" title="my tooltip is fantastic">tooltipable element&lt;/div>
-
-//with a widget
-$(myWidget).data("tooltip-placement", "LEFT").data("tooltip-delayShow", "200");
-                    </pre>
-    </p>
-
-</div>
-<div class="span12">
-    <h3>Options</h3>
-    <table class="table table-bordered table-striped">
-        <thead>
-        <tr>
-            <th style="width: 100px;">Name</th>
-            <th style="width: 100px;">Type</th>
-            <th style="width: 50px;">Default</th>
-            <th>Description</th>
-            <th style="width: 250px;">Example</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td>animation</td>
-            <td>boolean</td>
-            <td>true</td>
-            <td>apply a css fade transition to the tooltip</td>
-            <td><a href="javascript:;" data-tooltip-animation="false"
-                   title="This tooltip is displayed without animation">without animation</a> -
-                <a href="javascript:;" data-tooltip-animation="true"
-                   title="This tooltip is displayed with a fade animation">with animation</a></td>
-        </tr>
-        <tr>
-            <td>html</td>
-            <td>boolean</td>
-            <td>false</td>
-            <td>Insert html into the tooltip. If false, the content of the tooltip will be inserted as
-                innerText and the content will be escaped. Use false if you're worried about XSS
-                attacks.
-            </td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>placement</td>
-            <td>TooltipPlacement<br/> TooltipPlacementProvider</td>
-            <td>TooltipPlacement.TOP</td>
-            <td>
-                How to position the tooltip - top | bottom | left | right<br/>
-                The <code>TooltipPlacementProvider</code> allows you providing the placement of the tooltip
-                dynamically.
-            </td>
-            <td><a href="javascript:;" data-tooltip-placement="TOP" title="Tooltip on top">Tooltip on top</a><br/>
-                <a href="javascript:;" data-tooltip-placement="LEFT" title="Tooltip on left">Tooltip on left</a><br/>
-                <a href="javascript:;" data-tooltip-placement="RIGHT" title="Tooltip on right">Tooltip on right</a><br/>
-                <a href="javascript:;" data-tooltip-placement="BOTTOM" title="Tooltip on bottom">Tooltip on
-                    bottom</a><br/>
-                <a id="dynamicPlacement" href="javascript:;" data-tooltip-placement="BOTTOM">Placement change every
-                    time</a>
-
-            </td>
-        </tr>
-        <tr>
-            <td>selector</td>
-            <td>String</td>
-            <td>false</td>
-            <td>If a selector is provided, tooltip objects will be delegated to the specified targets.</td>
-            <td>Check this <a href="#cellList">example</a></td>
-        </tr>
-        <tr>
-            <td>content</td>
-            <td>String<br/>TooltipContentProvider</a></td>
-            <td>null</td>
-            <td>You have three different ways to provide the content of the tooltip :
-                - use the <code>title</code> attribute of the element
-                - provide a <code>TooltipContentProvider</code> object:
-                            <pre>
-new TooltipOptions().withContent(new TooltipContentProvider() {
-    private int counter = 0;
-
-    @Override
-    public String getContent(Element element) {
-        counter++;
-        return "This tooltip has been displayed "+counter+ (counter > 1 ? " times" : " time");
-    }
-});</pre>
-                - provide a simple String :
-                <pre>new TooltipOptions().withContent("My tooltip is  fantastic");</pre>
-            </td>
-            <td><a href="javascript:;" id="dynamicTooltip">Tooltip with dynamic content</a></td>
-        </tr>
-        <tr>
-            <td>trigger</td>
-            <td>TooltipTrigger</td>
-            <td>TooltipTrigger.HOVER</td>
-            <td>how tooltip is triggered - click | hover | focus | manual</td>
-            <td><a href="javascript:;" data-tooltip-trigger="click" title="my tooltip is fantastic">Click to
-                display
-                the tooltip</a></td>
-        </tr>
-        <tr>
-            <td>delay</td>
-            <td>int</td>
-            <td>0</td>
-            <td>
-                <p>delay showing and hiding the tooltip in ms - does not apply to manual trigger type</p>
-            </td>
-            <td>
-                <a href="javascript:;" title="My tooltip is fantastic" data-tooltip-delay="500">delay = 500 ms</a>
-            </td>
-
-        </tr>
-        <tr>
-            <td>delayShow</td>
-            <td>int</td>
-            <td>0</td>
-            <td>
-                <p>delay showing the tooltip in ms - does not apply to manual trigger type</p>
-            </td>
-            <td>
-                <a href="javascript:;" title="My tooltip is fantastic" data-tooltip-delayShow="500">delayShow = 500
-                    ms</a>
-            </td>
-
-        </tr>
-
-        <tr>
-            <td>delayHide</td>
-            <td>int</td>
-            <td>0</td>
-            <td>
-                <p>delay hiding the tooltip in ms - does not apply to manual trigger type</p>
-            </td>
-            <td>
-                <a href="javascript:;" title="My tooltip is fantastic" data-tooltip-delayHide="500">delayHide = 500
-                    ms</a>
-            </td>
-
-        </tr>
-        <tr>
-            <td>container</td>
-            <td>String</td>
-            <td>"body"</td>
-            <td>
-                <p>
-                    Css selector defining the container where the tooltip will be appended.<br/>
-                    If the container is equals to 'parent', the tooltip will be appended to the parent
-                    element of the element<br/>
-                    If the container is equals to 'element', the tooltip will be appended directly
-                    to the element.
-                </p>
-            </td>
-            <td>
-                Set the container to 'element', if you want that the user can hover the <a
-                    href="javascript:;" title="<a href='http://www.arcbees.com'>Visit our web site</a>"
-                    data-tooltip-container="element" data-tooltip-html="true" data-tooltip-delayHide="200">tooltip</a>
-            </td>
-
-        </tr>
-        <tr>
-            <td>offset</td>
-            <td>Offset</td>
-            <td>null</td>
-            <td>
-                <p>
-                    Offset to apply to the tooltip position.
-                </p>
-            </td>
-            <td>
-                Simulate top right placement of your tooltip by using the offset option:
-                <i id="offsetTooltip" class="icon-info-sign" href="javascript:;"
-                   data-tooltip-placement="TOP"></i>
-            </td>
-
-        </tr>
-        </tbody>
-    </table>
-</div>
-</div>
-
-</section>
-
-<section>
-    <div class="row">
-        <div class="span12">
-            <div class="page-header">
-                <h2>Other examples</h2>
-            </div>
-            <div class="row">
-                <div class="span6">
-                    <h3>Example with a CellList<a name="cellList"></a></h3>
-
-                    <p>
-                        Hover each name in the celllist to display more info about it.<br/>
-                        The cellist is used in collaboration with a pager. Each time wo reach the bottom of the list,
-                        the
-                        pager add automatically entries into the list. So we configure the plugin to use event
-                        delegation
-                    </p>
-
-                    <div class="row">
-                        <div class="span3">
-                            <div id="contactCellList"></div>
-                        </div>
-                        <div class="span3">
-
-                        </div>
-                    </div>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- Generated by Apache Maven Doxia at Mar 9, 2013 -->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>About</title>
+    <style type="text/css" media="all">
+      @import url("./css/maven-base.css");
+      @import url("./css/maven-theme.css");
+      @import url("./css/site.css");
+    </style>
+    <link rel="stylesheet" href="./css/print.css" type="text/css" media="print" />
+    <meta name="Date-Revision-yyyymmdd" content="20130309" />
+    <meta http-equiv="Content-Language" content="en" />
+        
+        </head>
+  <body class="composite">
+    <div id="banner">
+                    <div id="bannerLeft">
+                ArcBees GQuery Plugins
                 </div>
-                <div class="span6">
-                    <h3>Form validation<a name="formValidation"></a></h3>
-
-                    <p>
-                        This example shows how to use the tooltip plugin to display error message after form validation.
-                    </p>
-
-                    <form onsubmit="return false;">
-                        <fieldset>
-                            <legend>Login</legend>
-                            <label>Username</label>
-                            <input id="userNameField" type="text">
-                            <label>Password</label>
-                            <input id="passwordField" type="password">
-                        </fieldset>
-                        <button id="loginButton" class="btn">Submit</button>
-                    </form>
-                </div>
+                    <div class="clear">
+        <hr/>
+      </div>
+    </div>
+    <div id="breadcrumbs">
+            
+        
+                <div class="xleft">
+        <span id="publishDate">Last Published: 2013-03-09</span>
+                  &nbsp;| <span id="projectVersion">Version: 1.1-SNAPSHOT</span>
+                      </div>
+            <div class="xright">                    <a href="./" title="ArcBees GQuery Plugins">ArcBees GQuery Plugins</a>
+              
+        
+      </div>
+      <div class="clear">
+        <hr/>
+      </div>
+    </div>
+    <div id="leftColumn">
+      <div id="navcolumn">
+             
+        
+                                          <h5>Modules</h5>
+                  <ul>
+                  <li class="none">
+                          <a href="tooltip/index.html" title="Tooltip plugin for gQuery">Tooltip plugin for gQuery</a>
+            </li>
+                  <li class="none">
+                          <a href="tooltip-sample/index.html" title="Tooltip gQuery plugin example">Tooltip gQuery plugin example</a>
+            </li>
+          </ul>
+                       <h5>Project Documentation</h5>
+                  <ul>
+                                                                                                                                                                                                                                                                                                                                          <li class="expanded">
+                          <a href="project-info.html" title="Project Information">Project Information</a>
+                    <ul>
+                      <li class="none">
+            <strong>About</strong>
+          </li>
+                      <li class="none">
+                          <a href="team-list.html" title="Project Team">Project Team</a>
+            </li>
+                      <li class="none">
+                          <a href="modules.html" title="Project Modules">Project Modules</a>
+            </li>
+                      <li class="none">
+                          <a href="dependency-info.html" title="Dependency Information">Dependency Information</a>
+            </li>
+                      <li class="none">
+                          <a href="plugins.html" title="Project Plugins">Project Plugins</a>
+            </li>
+                      <li class="none">
+                          <a href="integration.html" title="Continuous Integration">Continuous Integration</a>
+            </li>
+                      <li class="none">
+                          <a href="issue-tracking.html" title="Issue Tracking">Issue Tracking</a>
+            </li>
+                      <li class="none">
+                          <a href="source-repository.html" title="Source Repository">Source Repository</a>
+            </li>
+                      <li class="none">
+                          <a href="dependency-convergence.html" title="Dependency Convergence">Dependency Convergence</a>
+            </li>
+                      <li class="none">
+                          <a href="license.html" title="Project License">Project License</a>
+            </li>
+                      <li class="none">
+                          <a href="plugin-management.html" title="Plugin Management">Plugin Management</a>
+            </li>
+                      <li class="none">
+                          <a href="distribution-management.html" title="Distribution Management">Distribution Management</a>
+            </li>
+                      <li class="none">
+                          <a href="project-summary.html" title="Project Summary">Project Summary</a>
+            </li>
+                      <li class="none">
+                          <a href="mail-lists.html" title="Mailing Lists">Mailing Lists</a>
+            </li>
+                      <li class="none">
+                          <a href="dependencies.html" title="Dependencies">Dependencies</a>
+            </li>
+              </ul>
+        </li>
+          </ul>
+                             <a href="http://maven.apache.org/" title="Built by Maven" class="poweredBy">
+        <img class="poweredBy" alt="Built by Maven" src="./images/logos/maven-feather.png" />
+      </a>
+                   
+        
             </div>
-
-        </div>
-
-
     </div>
-
-</section>
-
-<section>
-    <div class="row">
-        <div class="page-header span12">
-            <h2>Thanks to</h2>
-        </div>
-        <div class="span6">
-            <a href="http://arcbees.com"><img src="http://arcbees-ads.appspot.com/images/1.png" alt="Arcbees.com"
-                                              style="max-width:100%;"></a>
-        </div>
-
-        <div class="span6">
-            <a href="http://www.jetbrains.com/idea/index.html"><img
-                    src="https://lh6.googleusercontent.com/--QIIJfKrjSk/UJJ6X-UohII/AAAAAAAAAVM/cOW7EjnH778/s800/banner_IDEA.png"
-                    alt="IntelliJ" style="max-width:100%;"></a>
-        </div>
+    <div id="bodyColumn">
+      <div id="contentBox">
+        <div class="section"><h2>About ArcBees GQuery Plugins<a name="About_ArcBees_GQuery_Plugins"></a></h2><a name="About_ArcBees_GQuery_Plugins"></a><p>Arcbees GQuery Plugins</p></div>
+      </div>
     </div>
-
-</section>
-
-<script type="text/javascript">
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-37873644-1']);
-    _gaq.push(['_trackPageview']);
-
-    (function () {
-        var ga = document.createElement('script');
-        ga.type = 'text/javascript';
-        ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0];
-        s.parentNode.insertBefore(ga, s);
-    })();
-
-</script>
-</div>
-</body>
+    <div class="clear">
+      <hr/>
+    </div>
+    <div id="footer">
+      <div class="xright">
+              Copyright &#169;                    2012-2013
+                        <a href="http://arcbees.com">ArcBees</a>.
+            All Rights Reserved.      
+        
+                  </div>
+      <div class="clear">
+        <hr/>
+      </div>
+    </div>
+  </body>
 </html>
-
