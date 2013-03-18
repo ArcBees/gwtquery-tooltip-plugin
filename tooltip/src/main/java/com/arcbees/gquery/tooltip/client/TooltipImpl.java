@@ -20,6 +20,7 @@ import com.arcbees.gquery.tooltip.client.TooltipOptions.TooltipPlacement;
 import com.arcbees.gquery.tooltip.client.TooltipOptions.TooltipTrigger;
 import com.arcbees.gquery.tooltip.client.TooltipResources.TooltipStyle;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.query.client.Function;
 import com.google.gwt.query.client.GQuery;
@@ -261,6 +262,29 @@ public class TooltipImpl {
 
         setContent();
 
+        Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+            @Override
+            public void execute() {
+                doShowTooltip();
+            }
+        });
+    }
+
+    public void toggle() {
+        if (getTip().hasClass(style.in())) {
+            hide();
+        } else {
+            show();
+        }
+    }
+
+    public void toggleEnabled() {
+        enabled = !enabled;
+    }
+
+    private void doShowTooltip() {
+        GQuery tooltip = getTip();
+
         OffsetInfo oi = OffsetInfo.from($element);
         long actualWidth = tooltip.get(0).getOffsetWidth();
         long actualHeight = tooltip.get(0).getOffsetHeight();
@@ -300,18 +324,6 @@ public class TooltipImpl {
         tooltip.offset((int) finalTop, (int) finalLeft);
         tooltip.addClass(placementClass)
                 .addClass(style.in());
-    }
-
-    public void toggle() {
-        if (getTip().hasClass(style.in())) {
-            hide();
-        } else {
-            show();
-        }
-    }
-
-    public void toggleEnabled() {
-        enabled = !enabled;
     }
 
     //TODO use GQuery.on() method when it will be implemented in GQuery :)
