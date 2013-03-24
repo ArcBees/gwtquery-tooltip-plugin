@@ -262,12 +262,7 @@ public class TooltipImpl {
 
         setContent();
 
-        Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
-            @Override
-            public void execute() {
-                doShowTooltip();
-            }
-        });
+        showTooltip();
     }
 
     public void toggle() {
@@ -280,6 +275,19 @@ public class TooltipImpl {
 
     public void toggleEnabled() {
         enabled = !enabled;
+    }
+
+    private void showTooltip() {
+        if (widget != null) {
+            Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+                @Override
+                public void execute() {
+                    doShowTooltip();
+                }
+            });
+        } else {
+            doShowTooltip();
+        }
     }
 
     private void doShowTooltip() {
