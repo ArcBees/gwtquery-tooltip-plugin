@@ -175,17 +175,6 @@ public class TooltipImpl {
         timer.schedule(impl.options.getDelayHide());
     }
 
-    private boolean onDocumentClick(Event e) {
-        Element target = e.getEventTarget().cast();
-        GQuery $e = $(target);
-
-        // Ensure that the user didn't click on the tooltip
-        if ($e.parents("." + style.tooltip()).length() == 0) {
-            hide();
-        }
-        return false;
-    }
-
     private static void toggle(Event e, TooltipOptions options) {
         Element target = e.getCurrentEventTarget().cast();
         TooltipImpl impl = getImpl(target, options);
@@ -400,6 +389,17 @@ public class TooltipImpl {
     private boolean noContentInTooltip() {
         String title = getTitle();
         return (title == null && widget == null) || (title != null && title.length() == 0);
+    }
+
+    private boolean onDocumentClick(Event e) {
+        Element target = e.getEventTarget().cast();
+        GQuery $e = $(target);
+
+        // Ensure that the user didn't click on the tooltip
+        if ($e.parents("." + style.tooltip()).length() == 0) {
+            hide();
+        }
+        return false;
     }
 
     private void cancelTimer() {
