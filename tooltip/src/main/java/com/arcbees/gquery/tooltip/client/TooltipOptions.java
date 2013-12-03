@@ -48,6 +48,7 @@ public class TooltipOptions {
     }
 
     private static boolean globalAnimation;
+    private static boolean globalAutoClose;
     private static String globalContainer;
     private static String globalContent;
     private static TooltipContentProvider globalContentProvider;
@@ -66,6 +67,10 @@ public class TooltipOptions {
 
     public static void setGlobalAnimation(boolean globalAnimation) {
         TooltipOptions.globalAnimation = globalAnimation;
+    }
+
+    public static void setGlobalAutoClose(boolean globalAutoClose) {
+        TooltipOptions.globalAutoClose = globalAutoClose;
     }
 
     public static void setGlobalContainer(String globalContainer) {
@@ -131,7 +136,6 @@ public class TooltipOptions {
     static {
         //set default options globally
         globalAnimation = true;
-        globalHtml = false;
         globalPlacement = TooltipPlacement.TOP;
         globalTrigger = TooltipTrigger.HOVER;
         globalDelayShow = globalDelayHide = 0;
@@ -139,6 +143,7 @@ public class TooltipOptions {
     }
 
     private Boolean animation;
+    private Boolean autoClose;
     private String container;
     private String content;
     private TooltipContentProvider contentProvider;
@@ -162,6 +167,7 @@ public class TooltipOptions {
     TooltipOptions(TooltipOptions options) {
         if (options != null) {
             animation = options.isAnimation();
+            autoClose = options.isAutoClose();
             html = options.isHtml();
             placement = options.getPlacement();
             placementProvider = options.getPlacementProvider();
@@ -236,6 +242,10 @@ public class TooltipOptions {
         return getFirstOr(animation, globalAnimation);
     }
 
+    public boolean isAutoClose() {
+        return getFirstOr(autoClose, globalAutoClose);
+    }
+
     public boolean isHtml() {
         return getFirstOr(html, globalHtml);
     }
@@ -255,6 +265,17 @@ public class TooltipOptions {
      */
     public TooltipOptions withAnimation(boolean animation) {
         this.animation = animation;
+        return this;
+    }
+
+    /**
+     * Determine if the tooltip should be hidden when the user clicks outside the tooltip and the tooltip is triggered
+     * by click (TooltipTrigger.CLICK)
+     *
+     * @param autoClose
+     */
+    public TooltipOptions withAutoClose(boolean autoClose) {
+        this.autoClose = autoClose;
         return this;
     }
 

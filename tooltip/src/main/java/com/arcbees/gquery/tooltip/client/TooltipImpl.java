@@ -16,6 +16,11 @@
 
 package com.arcbees.gquery.tooltip.client;
 
+import static com.arcbees.gquery.tooltip.client.Tooltip.TOOLTIP_DATA_KEY;
+import static com.arcbees.gquery.tooltip.client.Tooltip.Tooltip;
+import static com.google.gwt.query.client.GQuery.$;
+import static com.google.gwt.query.client.GQuery.document;
+
 import com.arcbees.gquery.tooltip.client.TooltipOptions.TooltipPlacement;
 import com.arcbees.gquery.tooltip.client.TooltipOptions.TooltipTrigger;
 import com.arcbees.gquery.tooltip.client.TooltipResources.TooltipStyle;
@@ -31,10 +36,6 @@ import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.RootPanel;
-
-import static com.arcbees.gquery.tooltip.client.Tooltip.TOOLTIP_DATA_KEY;
-import static com.arcbees.gquery.tooltip.client.Tooltip.Tooltip;
-import static com.google.gwt.query.client.GQuery.$;
 
 public class TooltipImpl {
     public static interface DefaultTemplate extends SafeHtmlTemplates {
@@ -174,6 +175,17 @@ public class TooltipImpl {
         timer.schedule(impl.options.getDelayHide());
     }
 
+    private boolean onDocumentClick(Event e) {
+        Element target = e.getEventTarget().cast();
+        GQuery $e = $(target);
+
+        // Ensure that the user didn't click on the tooltip
+        if ($e.parents("." + style.tooltip()).length() == 0) {
+            hide();
+        }
+        return false;
+    }
+
     private static void toggle(Event e, TooltipOptions options) {
         Element target = e.getCurrentEventTarget().cast();
         TooltipImpl impl = getImpl(target, options);
@@ -190,6 +202,7 @@ public class TooltipImpl {
     private Timer timer;
     private TooltipStyle style;
     private IsWidget widget;
+    private Function autocloseFunction;
 
     public TooltipImpl(Element element, TooltipOptions options) {
         this(element, options, getDefaultResources());
@@ -199,6 +212,12 @@ public class TooltipImpl {
         this.$element = $(element);
         this.options = getOptions(options);
         this.style = resources.css();
+        this.autocloseFunction = new Function() {
+            @Override
+            public boolean f(Event e) {
+                return onDocumentClick(e);
+            }
+        };
         init();
     }
 
@@ -230,6 +249,8 @@ public class TooltipImpl {
         } else {
             detach();
         }
+
+        $(document).unbind("click", autocloseFunction);
     }
 
     public void show() {
@@ -332,6 +353,15 @@ public class TooltipImpl {
         tooltip.offset((int) finalTop, (int) finalLeft);
         tooltip.addClass(placementClass)
                 .addClass(style.in());
+
+        if (options.getTrigger() == TooltipTrigger.CLICK && options.isAutoClose()) {
+            $(document).delay(1, new Function() {
+                @Override
+                public void f() {
+                    $(document).click(autocloseFunction);
+                }
+            });
+        }
     }
 
     //TODO use GQuery.on() method when it will be implemented in GQuery :)
@@ -407,6 +437,7 @@ public class TooltipImpl {
 
         //read data-* attributes on element
         options.withAnimation(readDataAttributes("animation", options.isAnimation(), new BooleanConverter()));
+        options.withAutoClose(readDataAttributes("autoClose", options.isAutoClose(), new BooleanConverter()));
         options.withDelay(readDataAttributes("delay", options.getDelayShow(), new IntegerConverter()));
         options.withDelayHide(readDataAttributes("delayHide", options.getDelayHide(), new IntegerConverter()));
         options.withDelayShow(readDataAttributes("delayShow", options.getDelayShow(), new IntegerConverter()));
