@@ -16,11 +16,6 @@
 
 package com.arcbees.gquery.tooltip.client;
 
-import static com.arcbees.gquery.tooltip.client.Tooltip.TOOLTIP_DATA_KEY;
-import static com.arcbees.gquery.tooltip.client.Tooltip.Tooltip;
-import static com.google.gwt.query.client.GQuery.$;
-import static com.google.gwt.query.client.GQuery.document;
-
 import com.arcbees.gquery.tooltip.client.TooltipOptions.TooltipPlacement;
 import com.arcbees.gquery.tooltip.client.TooltipOptions.TooltipTrigger;
 import com.arcbees.gquery.tooltip.client.TooltipResources.TooltipStyle;
@@ -36,6 +31,11 @@ import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.RootPanel;
+
+import static com.arcbees.gquery.tooltip.client.Tooltip.TOOLTIP_DATA_KEY;
+import static com.arcbees.gquery.tooltip.client.Tooltip.Tooltip;
+import static com.google.gwt.query.client.GQuery.$;
+import static com.google.gwt.query.client.GQuery.document;
 
 public class TooltipImpl {
     public static interface DefaultTemplate extends SafeHtmlTemplates {
@@ -438,7 +438,13 @@ public class TooltipImpl {
         //read data-* attributes on element
         options.withAnimation(readDataAttributes("animation", options.isAnimation(), new BooleanConverter()));
         options.withAutoClose(readDataAttributes("autoClose", options.isAutoClose(), new BooleanConverter()));
-        options.withDelay(readDataAttributes("delay", options.getDelayShow(), new IntegerConverter()));
+
+        //delay override delayHide and delayShow, set it only  if a data-delay attribute is specified
+        int delay = readDataAttributes("delay", -1, new IntegerConverter());
+        if (delay != -1) {
+            options.withDelay(delay);
+        }
+
         options.withDelayHide(readDataAttributes("delayHide", options.getDelayHide(), new IntegerConverter()));
         options.withDelayShow(readDataAttributes("delayShow", options.getDelayShow(), new IntegerConverter()));
         options.withHtml(readDataAttributes("html", options.isHtml(), new BooleanConverter()));
