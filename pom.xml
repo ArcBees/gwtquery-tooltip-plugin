@@ -10,7 +10,7 @@
 
     <groupId>com.arcbees.gquery</groupId>
     <artifactId>gquery-plugins</artifactId>
-    <version>1.1-SNAPSHOT</version>
+    <version>1.1</version>
     <packaging>pom</packaging>
 
     <modules>
