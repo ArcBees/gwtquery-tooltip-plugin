@@ -14,10 +14,11 @@
  * the License.
  */
 
-input.invalid{
-    background-color:#F2DEDE;
-    border: 1px solid  #EED3D7;
+input.invalid {
+    background-color: #F2DEDE;
+    border: 1px solid #EED3D7;
 }
+
 .rounded {
     border: 1px solid #cccccc;
     -moz-border-radius: 5px;
@@ -30,6 +31,13 @@ input.invalid{
     width: 150px;
     height: 260px;
     border: 1px solid #696969;
+    overflow-x: auto;
+    overflow-y: auto;
+}
+
+.pagerLarge > .pager {
+    width: 395px;
+    overflow-x: visible;
 }
 
 .tooltipable {

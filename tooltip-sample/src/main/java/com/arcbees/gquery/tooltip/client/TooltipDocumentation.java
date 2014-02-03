@@ -21,19 +21,27 @@ import com.arcbees.gquery.tooltip.client.TooltipOptions.TooltipPlacement;
 import com.arcbees.gquery.tooltip.client.TooltipOptions.TooltipPlacementProvider;
 import com.arcbees.gquery.tooltip.client.TooltipOptions.TooltipTrigger;
 import com.arcbees.gquery.tooltip.client.contactcell.ContactCellList;
+import com.arcbees.gquery.tooltip.client.contactcell.ContactCellTable;
 import com.arcbees.gquery.tooltip.client.contactcell.ContactDatabase;
 import com.arcbees.gquery.tooltip.client.contactcell.ContactDatabase.ContactInfo;
 import com.arcbees.gquery.tooltip.client.contactcell.ContactTemplates;
 import com.arcbees.gquery.tooltip.client.contactcell.ContactTooltipResources;
+import com.arcbees.gquery.tooltip.client.contactcell.ShowMorePagerPanel;
 import com.arcbees.gquery.tooltip.client.resource.OffsetTooltipResources;
 import com.arcbees.gquery.tooltip.client.resource.ValidationTooltipResources;
+import com.arcbees.gquery.tooltip.client.resource.WidgetTooltipResources;
 import com.arcbees.gquery.tooltip.client.widget.RichTextToolbar;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.query.client.Function;
 import com.google.gwt.query.client.GQuery;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.user.client.ui.AbstractImagePrototype;
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.RichTextArea;
 import com.google.gwt.user.client.ui.RootPanel;
 
@@ -53,6 +61,9 @@ public class TooltipDocumentation implements EntryPoint {
         setupCellListTooltip();
 
         setupFormTooltip();
+
+        setupCellTableWidgetProviderTooltip();
+        setupWidgetTooltip();
 
         //dynamic tooltip
         $("#dynamicTooltip").as(Tooltip).tooltip(new TooltipOptions().withContent(new TooltipContentProvider() {
@@ -81,9 +92,78 @@ public class TooltipDocumentation implements EntryPoint {
                 .withContent("We override the resources file in order to move the arrow to the right"));
     }
 
+    private void setupWidgetTooltip() {
+        HTMLPanel htmlPanel = new HTMLPanel("<b>Hover here to show a widget</b>");
+        RootPanel.get("widget").add(htmlPanel);
+
+        ContactDatabase contactDatabase = ContactDatabase.get();
+        ContactCellList ccl = new ContactCellList(contactDatabase);
+
+        TooltipOptions options = new TooltipOptions();
+        options.withContent(ccl);
+        options.withPlacement(TooltipPlacement.LEFT);
+        options.withResources(WidgetTooltipResources.INSTANCE);
+        options.withContainer("element");
+
+        //apply plugin to the cell list
+        $(htmlPanel).as(Tooltip).tooltip(options);
+    }
+
+    private void setupCellTableWidgetProviderTooltip() {
+        final ContactCellTable contactCellTable = new ContactCellTable();
+
+        final ContactDatabase contactDatabase = ContactDatabase.get();
+        contactDatabase.addDataDisplay(contactCellTable);
+
+        ShowMorePagerPanel pagerPanel = new ShowMorePagerPanel();
+        pagerPanel.setDisplay(contactCellTable);
+        pagerPanel.addStyleName("pagerLarge");
+
+        RootPanel.get("contactWidgetProvider").add(pagerPanel);
+
+        TooltipOptions options = new TooltipOptions();
+
+        //provide dynamic content
+        options.withContent(new TooltipOptions.TooltipWidgetContentProvider() {
+            @Override
+            public IsWidget getContent(Element element) {
+                return createWidget(element);
+            }
+
+            private IsWidget createWidget(Element element) {
+                int absoluteRowIndex = Integer.valueOf($(element).attr("__gwt_row"));
+                int pageStartIndex = contactCellTable.getVisibleRange().getStart();
+                int relativeIndex = absoluteRowIndex - pageStartIndex;
+
+                final ContactInfo contactInfo = contactCellTable.getVisibleItem(relativeIndex);
+                Button deleteButton = new Button("Delete");
+                deleteButton.addClickHandler(new ClickHandler() {
+                    @Override
+                    public void onClick(ClickEvent event) {
+                        contactDatabase.remove(contactInfo);
+                    }
+                });
+
+                return deleteButton;
+            }
+        });
+
+        options.withResources(ContactTooltipResources.INSTANCE);
+        options.withPlacement(TooltipPlacement.LEFT);
+        // event delegation : the plugin will run on all elements inside the CellList having 'tooltipable' as css
+        // class, present in the dom or added in the future.
+        options.withSelector("tbody tr");
+        options.withContainer("element");
+
+        //apply plugin to the cell list
+        $(contactCellTable).as(Tooltip).tooltip(options);
+    }
+
     private void setupCellListTooltip() {
+        final ContactDatabase contactDatabase = ContactDatabase.get();
+
         //CellList with pager
-        ContactCellList ccl = new ContactCellList();
+        ContactCellList ccl = new ContactCellList(contactDatabase);
         RootPanel.get("contactCellList").add(ccl);
 
         TooltipOptions options = new TooltipOptions();
@@ -93,7 +173,7 @@ public class TooltipDocumentation implements EntryPoint {
             @Override
             public String getContent(Element element) {
                 Integer id = Integer.parseInt(element.getAttribute("data-contact-id"));
-                ContactInfo contact = ContactDatabase.get().queryContactById(id);
+                ContactInfo contact = contactDatabase.queryContactById(id);
 
                 return ContactTemplates.INSTANCE.contactCellTooltip(contactImage, contact.getFullName(),
                         contact.getAddress()).asString();
