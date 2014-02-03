@@ -105,7 +105,6 @@ public class TooltipDocumentation implements EntryPoint {
         options.withResources(WidgetTooltipResources.INSTANCE);
         options.withContainer("element");
 
-        //apply plugin to the cell list
         $(htmlPanel).as(Tooltip).tooltip(options);
     }
 
@@ -150,12 +149,10 @@ public class TooltipDocumentation implements EntryPoint {
 
         options.withResources(ContactTooltipResources.INSTANCE);
         options.withPlacement(TooltipPlacement.LEFT);
-        // event delegation : the plugin will run on all elements inside the CellList having 'tooltipable' as css
-        // class, present in the dom or added in the future.
         options.withSelector("tbody tr");
         options.withContainer("element");
 
-        //apply plugin to the cell list
+        //apply plugin to the cell table
         $(contactCellTable).as(Tooltip).tooltip(options);
     }
 
