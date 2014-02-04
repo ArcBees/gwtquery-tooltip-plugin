@@ -126,10 +126,6 @@ public class TooltipDocumentation implements EntryPoint {
         options.withContent(new TooltipOptions.TooltipWidgetContentProvider() {
             @Override
             public IsWidget getContent(Element element) {
-                return createWidget(element);
-            }
-
-            private IsWidget createWidget(Element element) {
                 int absoluteRowIndex = Integer.valueOf($(element).attr("__gwt_row"));
                 int pageStartIndex = contactCellTable.getVisibleRange().getStart();
                 int relativeIndex = absoluteRowIndex - pageStartIndex;
