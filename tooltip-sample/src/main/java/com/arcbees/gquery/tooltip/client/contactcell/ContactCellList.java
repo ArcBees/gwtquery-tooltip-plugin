@@ -18,12 +18,11 @@ package com.arcbees.gquery.tooltip.client.contactcell;
 
 import com.arcbees.gquery.tooltip.client.contactcell.ContactDatabase.ContactInfo;
 import com.google.gwt.cell.client.AbstractCell;
-import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.cellview.client.CellList;
 import com.google.gwt.user.cellview.client.HasKeyboardPagingPolicy.KeyboardPagingPolicy;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.view.client.RangeChangeEvent.Handler;
+import com.google.gwt.view.client.AbstractDataProvider;
 
 public class ContactCellList extends Composite {
     /**
@@ -45,30 +44,23 @@ public class ContactCellList extends Composite {
         }
     }
 
-    public ContactCellList() {
+    public ContactCellList(AbstractDataProvider<ContactInfo> dataProvider) {
         ShowMorePagerPanel pagerPanel = new ShowMorePagerPanel();
-        pagerPanel.setDisplay(initCellList());
+        pagerPanel.setDisplay(initCellList(dataProvider));
 
         initWidget(pagerPanel);
     }
 
-    private CellList<ContactInfo> initCellList() {
+    private CellList<ContactInfo> initCellList(AbstractDataProvider<ContactInfo> dataProvider) {
         ContactCell contactCell = new ContactCell();
 
         CellList<ContactInfo> cellList = new CellList<ContactInfo>(contactCell,
-                ContactDatabase.ContactInfo.KEY_PROVIDER) {
-
-            @Override
-            public HandlerRegistration addRangeChangeHandler(Handler handler) {
-                return super.addRangeChangeHandler(handler);    //To change body of overridden methods use File |
-                // Settings | File Templates.
-            }
-        };
+                ContactDatabase.ContactInfo.KEY_PROVIDER);
 
         cellList.setPageSize(30);
         cellList.setKeyboardPagingPolicy(KeyboardPagingPolicy.INCREASE_RANGE);
 
-        ContactDatabase.get().addDataDisplay(cellList);
+        dataProvider.addDataDisplay(cellList);
 
         return cellList;
     }

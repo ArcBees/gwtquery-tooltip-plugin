@@ -1,5 +1,5 @@
 /**
- * Copyright 2013 ArcBees Inc.
+ * Copyright 2014 ArcBees Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,6 +16,7 @@
 package com.arcbees.gquery.tooltip.client.contactcell;
 
 import com.google.gwt.user.client.Random;
+import com.google.gwt.view.client.AbstractDataProvider;
 import com.google.gwt.view.client.HasData;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.ProvidesKey;
@@ -30,7 +31,7 @@ import java.util.Map;
  * the code below comes from the GWT showcase :
  * http://gwt.google.com/samples/Showcase/Showcase.html#!CwCellList
  */
-public class ContactDatabase {
+public class ContactDatabase extends AbstractDataProvider<ContactDatabase.ContactInfo> {
     /**
      * Information about a contact.
      */
@@ -221,13 +222,8 @@ public class ContactDatabase {
     private static final String[] STREET_SUFFIX = {"Street", "Road", "Lane", "Boulevard", "Way", "Parkway", "Circle",
             "Avenue"};
 
-    private static ContactDatabase instance;
-
     public static ContactDatabase get() {
-        if (instance == null) {
-            instance = new ContactDatabase();
-        }
-        return instance;
+       return new ContactDatabase();
     }
 
     private ListDataProvider<ContactInfo> dataProvider;
@@ -242,12 +238,21 @@ public class ContactDatabase {
         generateContacts(250);
     }
 
+    public void remove(ContactInfo contactInfo) {
+        dataProvider.getList().remove(contactInfo);
+    }
+
+    @Override
     public void addDataDisplay(HasData<ContactInfo> display) {
         dataProvider.addDataDisplay(display);
     }
 
     public ContactInfo queryContactById(Integer id) {
         return contactInfoById.get(id);
+    }
+
+    @Override
+    protected void onRangeChanged(HasData<ContactInfo> display) {
     }
 
     private void addContact(ContactInfo contact) {

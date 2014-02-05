@@ -1,5 +1,5 @@
 /**
- * Copyright 2013 ArcBees Inc.
+ * Copyright 2014 ArcBees Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -13,6 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
+
 package com.arcbees.gquery.tooltip.client.contactcell;
 
 import com.arcbees.gquery.tooltip.client.Tooltip;
@@ -21,7 +22,7 @@ import com.google.gwt.event.dom.client.ScrollHandler;
 import com.google.gwt.query.client.GQuery;
 import com.google.gwt.user.cellview.client.AbstractPager;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.HasRows;
 
@@ -48,7 +49,7 @@ public class ShowMorePagerPanel extends AbstractPager {
     /**
      * The scrollable panel.
      */
-    private final ScrollPanel scrollable = new ScrollPanel();
+    private final SimplePanel scrollable = new SimplePanel();
 
     /**
      * Construct a new {@link ShowMorePagerPanel}.
@@ -57,32 +58,32 @@ public class ShowMorePagerPanel extends AbstractPager {
         init();
 
         // Handle scroll events.
-        scrollable.addScrollHandler(new ScrollHandler() {
-            public void onScroll(ScrollEvent event) {
-                // If scrolling up, ignore the event.
-                int oldScrollPos = lastScrollPos;
-                lastScrollPos = scrollable.getScrollPosition();
-                if (oldScrollPos >= lastScrollPos) {
-                    return;
-                }
-
-                HasRows display = getDisplay();
-                if (display == null) {
-                    return;
-                }
-                int maxScrollTop = scrollable.getWidget().getOffsetHeight()
-                        - scrollable.getOffsetHeight();
-                if (lastScrollPos >= maxScrollTop) {
-                    // We are near the end, so increase the page size.
-                    int newPageSize = Math.min(display.getVisibleRange().getLength()
-                            + incrementSize, display.getRowCount());
-                    //all children will be replaced, ensure to destroy existing tooltip in order to avoid ghost
-                    // tooltips
-                    GQuery.$(".tooltipable", (Widget) display).as(Tooltip.Tooltip).destroy();
-                    display.setVisibleRange(0, newPageSize);
-                }
+    scrollable.addDomHandler(new ScrollHandler() {
+        public void onScroll(ScrollEvent event) {
+            // If scrolling up, ignore the event.
+            int oldScrollPos = lastScrollPos;
+            lastScrollPos = scrollable.getElement().getScrollTop();
+            if (oldScrollPos >= lastScrollPos) {
+                return;
             }
-        });
+
+            HasRows display = getDisplay();
+            if (display == null) {
+                return;
+            }
+            int maxScrollTop = scrollable.getWidget().getOffsetHeight()
+                    - scrollable.getOffsetHeight();
+            if (lastScrollPos >= maxScrollTop) {
+                // We are near the end, so increase the page size.
+                int newPageSize = Math.min(display.getVisibleRange().getLength()
+                        + incrementSize, display.getRowCount());
+                //all children will be replaced, ensure to destroy existing tooltip in order to avoid ghost
+                // tooltips
+                GQuery.$(".tooltipable", (Widget) display).as(Tooltip.Tooltip).destroy();
+                display.setVisibleRange(0, newPageSize);
+            }
+        }
+    }, ScrollEvent.getType());
     }
 
     /**
