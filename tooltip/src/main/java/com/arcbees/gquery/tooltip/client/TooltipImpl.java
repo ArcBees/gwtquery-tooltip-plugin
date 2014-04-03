@@ -258,7 +258,8 @@ public class TooltipImpl {
                 .removeClass(style.in(), style.top(), style.bottom(), style.left(), style.right())
                 .css("top", "0")
                 .css("left", "0")
-                .css("display", "block");
+                .css("display", "block")
+                .css("visibility", "hidden");
 
         String container = options.getContainer();
 
@@ -342,6 +343,7 @@ public class TooltipImpl {
         tooltip.offset((int) finalTop, (int) finalLeft);
         tooltip.addClass(placementClass)
                 .addClass(style.in());
+        tooltip.css("visibility", "visible");
 
         if (options.getTrigger() == TooltipTrigger.CLICK && options.isAutoClose()) {
             $(document).delay(1, new Function() {
