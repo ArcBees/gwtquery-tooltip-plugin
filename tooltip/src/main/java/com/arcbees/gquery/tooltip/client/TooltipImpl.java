@@ -213,6 +213,10 @@ public class TooltipImpl {
     public void destroy() {
         hide();
         unbind();
+
+        if (options.getSelector() != null) {
+            $(options.getSelector(), $element.get(0)).as(Tooltip).destroy();
+        }
     }
 
     public void disable() {
