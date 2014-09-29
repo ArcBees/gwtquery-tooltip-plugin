@@ -32,8 +32,8 @@ import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.RootPanel;
 
-import static com.arcbees.gquery.tooltip.client.Tooltip.TOOLTIP_DATA_KEY;
 import static com.arcbees.gquery.tooltip.client.Tooltip.Tooltip;
+import static com.arcbees.gquery.tooltip.client.Tooltip.getImpl;
 import static com.google.gwt.query.client.GQuery.$;
 import static com.google.gwt.query.client.GQuery.document;
 
@@ -110,9 +110,13 @@ public class TooltipImpl {
     private static final int ANIMATION_DURATION = 150;
     private static TooltipResources DEFAULT_RESOURCES;
 
-    private static void enter(Event e, TooltipOptions delegateOptions) {
+    private static void enter(Event e, TooltipImpl originalImpl) {
+        if (!originalImpl.enabled) {
+            return;
+        }
+
         Element target = e.getCurrentEventTarget().cast();
-        final TooltipImpl impl = getImpl(target, delegateOptions);
+        final TooltipImpl impl = getTooltipImpl(target, originalImpl.delegationOptions);
 
         impl.cancelTimer();
 
@@ -143,15 +147,15 @@ public class TooltipImpl {
         return DEFAULT_RESOURCES;
     }
 
-    private static TooltipImpl getImpl(Element e, TooltipOptions initOption) {
+    private static TooltipImpl getTooltipImpl(Element e, TooltipOptions initOption) {
         //ensure that a tooltip was initialized for the element (in case of delegation) and get the implementation
-        return $(e).as(Tooltip).tooltip(initOption).data(TOOLTIP_DATA_KEY,
-                TooltipImpl.class);
+        $(e).as(Tooltip).tooltip(initOption);
+        return getImpl(e, initOption.getSelector());
     }
 
     private static void leave(Event e, TooltipOptions delegateOptions) {
         Element target = e.getCurrentEventTarget().cast();
-        final TooltipImpl impl = getImpl(target, delegateOptions);
+        final TooltipImpl impl = getTooltipImpl(target, delegateOptions);
 
         impl.cancelTimer();
 
@@ -177,7 +181,7 @@ public class TooltipImpl {
 
     private static void toggle(Event e, TooltipOptions options) {
         Element target = e.getCurrentEventTarget().cast();
-        TooltipImpl impl = getImpl(target, options);
+        TooltipImpl impl = getTooltipImpl(target, options);
 
         impl.toggle();
     }
@@ -213,6 +217,10 @@ public class TooltipImpl {
     public void destroy() {
         hide();
         unbind();
+
+        if (options.getSelector() != null) {
+            $(options.getSelector(), $element.get(0)).as(Tooltip).destroy();
+        }
     }
 
     public void disable() {
@@ -258,7 +266,8 @@ public class TooltipImpl {
                 .removeClass(style.in(), style.top(), style.bottom(), style.left(), style.right())
                 .css("top", "0")
                 .css("left", "0")
-                .css("display", "block");
+                .css("display", "block")
+                .css("visibility", "hidden");
 
         String container = options.getContainer();
 
@@ -285,6 +294,10 @@ public class TooltipImpl {
 
     public void toggleEnabled() {
         enabled = !enabled;
+    }
+
+    public TooltipOptions getOptions() {
+        return options;
     }
 
     private void showTooltip() {
@@ -342,6 +355,7 @@ public class TooltipImpl {
         tooltip.offset((int) finalTop, (int) finalLeft);
         tooltip.addClass(placementClass)
                 .addClass(style.in());
+        tooltip.css("visibility", "visible");
 
         if (options.getTrigger() == TooltipTrigger.CLICK && options.isAutoClose()) {
             $(document).delay(1, new Function() {
@@ -414,7 +428,6 @@ public class TooltipImpl {
 
         if (title != null && title.length() > 0) {
             $element.attr(DATA_TITLE_ATTRIBUTE, title);
-            $element.get(0).removeAttribute(TITLE_ATTRIBUTE);
         }
     }
 
@@ -504,6 +517,7 @@ public class TooltipImpl {
             //options use in case of delegation
             delegationOptions = new TooltipOptions(options).withTrigger(TooltipTrigger.MANUAL).withSelector(null);
         } else {
+            delegationOptions = options;
             fixTitle();
         }
 
@@ -521,7 +535,7 @@ public class TooltipImpl {
             bind(eventIn, new Function() {
                 @Override
                 public boolean f(Event e) {
-                    enter(e, delegationOptions);
+                    enter(e, TooltipImpl.this);
                     return true;
                 }
             });
@@ -541,6 +555,11 @@ public class TooltipImpl {
 
     private <T> T readDataAttributes(String name, T defaultData, Converter<T> converter) {
         String value = $element.data("tooltip-" + name, String.class);
+
+        // waiting fix https://github.com/gwtquery/gwtquery/pull/298
+        if ("null".equals(value)) {
+            value = null;
+        }
 
         if (value == null || value.length() == 0) {
             //TODO $.data() should be able to read html5 data-* attributes

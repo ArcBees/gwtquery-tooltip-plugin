@@ -34,7 +34,7 @@
     <h1>GQuery Tooltip plugin</h1>
 
     <p class="lead">This
-        <a href="http://gwtquery.com">GwtQuery</a> plugin allows you adding easily tooltip to any widget or dom
+        <a href="http://www.gquery.org">GwtQuery</a> plugin allows you adding easily tooltip to any widget or dom
         element.</p>
 </header>
 
@@ -237,9 +237,10 @@ new TooltipOptions().withContent(new TooltipContentProvider() {
             <td>boolean</td>
             <td>false</td>
             <td>Determine if the tooltip should be closed when the user clicks outside of the tooltip. This option is
-                only useful when the tooltip is triggered by click (trigger == TooltipTrigger.CLICK)</td>
+                only useful when the tooltip is triggered by click (trigger == TooltipTrigger.CLICK)
+            </td>
             <td><a href="javascript:;" data-tooltip-trigger="click" data-tooltip-autoClose="true"
-                    title="Click outside the tooltip to close it.">Click to display the tooltip</a></td>
+                   title="Click outside the tooltip to close it.">Click to display the tooltip</a></td>
         </tr>
         <tr>
             <td>delay</td>
@@ -331,6 +332,44 @@ new TooltipOptions().withContent(new TooltipContentProvider() {
             </div>
             <div class="row">
                 <div class="span6">
+                    <h3>Widget Provider<a name="cellTable"></a></h3>
+
+                    <p>
+                        In some cases, you might want to have more complex widgets shown in your tooltip. You can use
+                        the TooltipWidgetContentProvider to provide a widget for the content that triggers the tooltip.
+                        The more common use case is when you want to show a toolbar on a CellTable. Hover on a row to
+                        view an example
+                    </p>
+
+                    <div class="row">
+                        <div class="span3">
+                            <div id="contactWidgetProvider"></div>
+                        </div>
+                        <div class="span3">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="span6">
+                    <h3>Widget<a name="cellTable2"></a></h3>
+
+                    <p>
+                        If the content you need to show is static, but is still more complex than an HTMLTemplate, you
+                        can set a Widget to be shown directly
+                    </p>
+
+                    <div class="row">
+                        <div class="span3">
+                            <div id="widget"></div>
+                        </div>
+                        <div class="span3">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="span6">
                     <h3>Example with a CellList<a name="cellList"></a></h3>
 
                     <p>
@@ -369,7 +408,6 @@ new TooltipOptions().withContent(new TooltipContentProvider() {
                     </form>
                 </div>
             </div>
-
         </div>
 
 

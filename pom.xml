@@ -82,7 +82,7 @@
 
         <gwt.maven.version>2.6.1</gwt.maven.version>
         <maven-javadoc-plugin.version>2.9</maven-javadoc-plugin.version>
-        <github.version>0.7</github.version>
+        <github.version>0.9</github.version>
 
         <!-- maven -->
         <target.jdk>1.7</target.jdk>

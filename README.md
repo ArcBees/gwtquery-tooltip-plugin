@@ -9,10 +9,10 @@
     <th>Javadocs</th>
   </tr>
   <tr>
-    <td><a href="https://github.com/ArcBees/ArcBees-GQuery-Plugins/tree/master/tooltip">Tooltip Home</a></td>
-    <td><a href="http://arcbees.github.com/ArcBees-GQuery-Plugins/">Demo & Docs</a></td>
-    <td><a href="https://github.com/ArcBees/ArcBees-GQuery-Plugins/tree/master/tooltip-sample/src/main/java/com/arcbees/gquery/tooltip/client">Source</a></td>
-    <td><a href="http://arcbees.github.com/ArcBees-GQuery-Plugins/javadoc/apidocs/">Javadocs</a></td>
+    <td><a href="https://github.com/ArcBees/gwtquery-tooltip-plugin/tree/master/tooltip">Tooltip Home</a></td>
+    <td><a href="http://arcbees.github.com/gwtquery-tooltip-plugin/">Demo & Docs</a></td>
+    <td><a href="https://github.com/ArcBees/gwtquery-tooltip-plugin/tree/master/tooltip-sample/src/main/java/com/arcbees/gquery/tooltip/client">Source</a></td>
+    <td><a href="http://arcbees.github.com/gwtquery-tooltip-plugin/javadoc/apidocs/">Javadocs</a></td>
   </tr>
 </table>
 
