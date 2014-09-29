@@ -64,6 +64,7 @@ public class TooltipOptions {
     private static GQuery.Offset globalOffset;
     private static TooltipOffsetProvider globalOffsetProvider;
     private static Widget globalWidget;
+    private static boolean globalAlwaysVisible;
 
     public static void setGlobalAnimation(boolean globalAnimation) {
         TooltipOptions.globalAnimation = globalAnimation;
@@ -71,6 +72,10 @@ public class TooltipOptions {
 
     public static void setGlobalAutoClose(boolean globalAutoClose) {
         TooltipOptions.globalAutoClose = globalAutoClose;
+    }
+
+    public static void setGlobalAlwaysVisible(boolean globalAlwaysVisible) {
+        TooltipOptions.globalAlwaysVisible = globalAlwaysVisible;
     }
 
     public static void setGlobalContainer(String globalContainer) {
@@ -140,6 +145,7 @@ public class TooltipOptions {
         globalTrigger = TooltipTrigger.HOVER;
         globalDelayShow = globalDelayHide = 0;
         globalContainer = "body";
+        globalAlwaysVisible = true;
     }
 
     private Boolean animation;
@@ -160,6 +166,7 @@ public class TooltipOptions {
     private TooltipOffsetProvider offsetProvider;
     private Widget contentWidget;
     private TooltipWidgetContentProvider widgetContentProvider;
+    private Boolean alwaysVisible;
 
     public TooltipOptions() {
     }
@@ -250,6 +257,10 @@ public class TooltipOptions {
         return getFirstOr(html, globalHtml);
     }
 
+    public boolean isAlwaysVisible() {
+        return getFirstOr(alwaysVisible, globalAlwaysVisible);
+    }
+
     public Widget getWidget() {
         return getFirstOr(contentWidget, globalWidget);
     }
@@ -276,6 +287,19 @@ public class TooltipOptions {
      */
     public TooltipOptions withAutoClose(boolean autoClose) {
         this.autoClose = autoClose;
+        return this;
+    }
+
+    /**
+     * If this property is set to true (default), the tooltip will change its placement in order to ensure to be always
+     * entirely visible.
+     * <p/>
+     * Ex: if the TooltipPlacement is set to BOTTOM and that the element is on the bottom of the page and there is not
+     * enough place to display the tooltip. The tooltip will be placed above the element.
+     *
+     */
+    public TooltipOptions withAlwaysVisible(boolean alwaysVisible) {
+        this.alwaysVisible = alwaysVisible;
         return this;
     }
 

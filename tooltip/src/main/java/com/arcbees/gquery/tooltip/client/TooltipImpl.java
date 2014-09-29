@@ -29,6 +29,7 @@ import com.google.gwt.safehtml.client.SafeHtmlTemplates;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.RootPanel;
 
@@ -319,13 +320,19 @@ public class TooltipImpl {
         OffsetInfo oi = OffsetInfo.from($element);
         long actualWidth = tooltip.get(0).getOffsetWidth();
         long actualHeight = tooltip.get(0).getOffsetHeight();
-        long finalTop = -1;
-        long finalLeft = -1;
+        Offset additionalOffset = getAdditionalOffset();
+        if (additionalOffset != null) {
+            oi.top += additionalOffset.top;
+            oi.left += additionalOffset.left;
+        }
+
+        long finalTop = 0;
+        long finalLeft = 0;
         String placementClass = null;
 
-        switch (getPlacement()) {
+        switch (getPlacement(oi, actualHeight, actualWidth)) {
             case BOTTOM:
-                finalTop = oi.top + oi.height;
+                finalTop += oi.top + oi.height;
                 finalLeft = oi.left + oi.width / 2 - actualWidth / 2;
                 placementClass = style.bottom();
                 break;
@@ -344,12 +351,6 @@ public class TooltipImpl {
                 finalLeft = oi.left + oi.width;
                 placementClass = style.right();
                 break;
-        }
-
-        Offset additionalOffset = getAdditionalOffset();
-        if (additionalOffset != null) {
-            finalTop += additionalOffset.top;
-            finalLeft += additionalOffset.left;
         }
 
         tooltip.offset((int) finalTop, (int) finalLeft);
@@ -472,12 +473,63 @@ public class TooltipImpl {
         return options;
     }
 
-    private TooltipPlacement getPlacement() {
+    private TooltipPlacement getPlacement(OffsetInfo oi, long actualHeight, long actualWidth) {
+        TooltipPlacement tooltipPlacement;
         if (options.getPlacementProvider() != null) {
-            return options.getPlacementProvider().getPlacement($element.get(0));
+            tooltipPlacement = options.getPlacementProvider().getPlacement($element.get(0));
+        } else {
+            tooltipPlacement = options.getPlacement();
         }
 
-        return options.getPlacement();
+        if (!options.isAlwaysVisible()) {
+            return tooltipPlacement;
+        }
+
+        return ensureTooltipIsVisible(tooltipPlacement, oi, actualHeight, actualWidth);
+    }
+
+    private TooltipPlacement ensureTooltipIsVisible(TooltipPlacement originalTooltipPlacement, OffsetInfo oi,
+            long actualHeight, long actualWidth) {
+        long bound;
+
+        switch (originalTooltipPlacement) {
+            case TOP:
+                bound = oi.top - actualHeight;
+
+                if (bound < 0) {
+                    return TooltipPlacement.BOTTOM;
+                }
+
+                break;
+            case BOTTOM:
+                bound = oi.top + oi.height + actualHeight;
+
+                if (bound > Window.getClientHeight()) {
+                    return TooltipPlacement.TOP;
+                }
+
+                break;
+            case LEFT:
+                bound = oi.left - actualWidth;
+
+                if (bound < 0) {
+                    return TooltipPlacement.RIGHT;
+                }
+
+                break;
+            case RIGHT:
+                bound = oi.left + oi.width;
+
+                if (bound > Window.getClientWidth()) {
+                    return TooltipPlacement.LEFT;
+                }
+
+                break;
+            default:
+                throw new RuntimeException("unknown or null TooltipPlacement");
+        }
+
+        return originalTooltipPlacement;
     }
 
     private SafeHtml getTemplate() {
