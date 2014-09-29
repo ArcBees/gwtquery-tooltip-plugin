@@ -49,6 +49,7 @@ public class Tooltip extends GQuery {
             Map<String, TooltipImpl> impls = $e.data(TOOLTIP_DATA_KEY);
             if (impls == null) {
                 impls = new HashMap<String, TooltipImpl>();
+                $e.data(TOOLTIP_DATA_KEY, impls);
             }
 
             if (!impls.containsKey(notNullSelector(options.getSelector()))) {
@@ -58,10 +59,6 @@ public class Tooltip extends GQuery {
                     impl = new TooltipImpl(e, options);
                 } else {
                     impl = new TooltipImpl(e, options, options.getResources());
-                }
-
-                if (impls.size() == 0) {
-                    $e.data(TOOLTIP_DATA_KEY, impls);
                 }
 
                 impls.put(notNullSelector(options.getSelector()), impl);
