@@ -16,9 +16,11 @@
 
 package com.arcbees.gquery.tooltip.client;
 
-import com.arcbees.gquery.tooltip.client.TooltipOptions.TooltipPlacement;
-import com.arcbees.gquery.tooltip.client.TooltipOptions.TooltipTrigger;
-import com.arcbees.gquery.tooltip.client.TooltipResources.TooltipStyle;
+import static com.arcbees.gquery.tooltip.client.Tooltip.Tooltip;
+import static com.arcbees.gquery.tooltip.client.Tooltip.getImpl;
+import static com.google.gwt.query.client.GQuery.$;
+import static com.google.gwt.query.client.GQuery.document;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.Element;
@@ -33,10 +35,9 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.RootPanel;
 
-import static com.arcbees.gquery.tooltip.client.Tooltip.Tooltip;
-import static com.arcbees.gquery.tooltip.client.Tooltip.getImpl;
-import static com.google.gwt.query.client.GQuery.$;
-import static com.google.gwt.query.client.GQuery.document;
+import com.arcbees.gquery.tooltip.client.TooltipOptions.TooltipPlacement;
+import com.arcbees.gquery.tooltip.client.TooltipOptions.TooltipTrigger;
+import com.arcbees.gquery.tooltip.client.TooltipResources.TooltipStyle;
 
 public class TooltipImpl {
     public static interface DefaultTemplate extends SafeHtmlTemplates {
@@ -358,7 +359,7 @@ public class TooltipImpl {
                 .addClass(style.in());
         tooltip.css("visibility", "visible");
 
-        if (options.getTrigger() == TooltipTrigger.CLICK && options.isAutoClose()) {
+        if (options.getTrigger() != TooltipTrigger.HOVER && options.isAutoClose()) {
             $(document).delay(1, new Function() {
                 @Override
                 public void f() {
