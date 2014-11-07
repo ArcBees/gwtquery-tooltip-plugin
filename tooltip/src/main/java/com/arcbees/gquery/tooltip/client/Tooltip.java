@@ -23,7 +23,6 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.query.client.GQuery;
 import com.google.gwt.query.client.plugins.Plugin;
 
-public class Tooltip extends GQuery {
     public static final Class<Tooltip> Tooltip = GQuery.registerPlugin(Tooltip.class,
             new Plugin<Tooltip>() {
                 public Tooltip init(GQuery gq) {
