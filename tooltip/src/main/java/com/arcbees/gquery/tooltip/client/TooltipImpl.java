@@ -16,14 +16,24 @@
 
 package com.arcbees.gquery.tooltip.client;
 
-import static com.arcbees.gquery.tooltip.client.Tooltip.Tooltip;
-import static com.arcbees.gquery.tooltip.client.Tooltip.getImpl;
-import static com.google.gwt.query.client.GQuery.$;
-import static com.google.gwt.query.client.GQuery.document;
+import java.util.ArrayList;
+import java.util.List;
 
+import com.arcbees.gquery.tooltip.client.TooltipOptions.TooltipPlacement;
+import com.arcbees.gquery.tooltip.client.TooltipOptions.TooltipTrigger;
+import com.arcbees.gquery.tooltip.client.TooltipResources.TooltipStyle;
+import com.arcbees.gquery.tooltip.client.event.BeforeHideTooltipEvent;
+import com.arcbees.gquery.tooltip.client.event.BeforeSetTooltipContentEvent;
+import com.arcbees.gquery.tooltip.client.event.BeforeShowTooltipEvent;
+import com.arcbees.gquery.tooltip.client.event.HideTooltipEvent;
+import com.arcbees.gquery.tooltip.client.event.ShowTooltipEvent;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.event.shared.EventHandler;
+import com.google.gwt.event.shared.GwtEvent;
+import com.google.gwt.event.shared.GwtEvent.Type;
+import com.google.gwt.event.shared.HasHandlers;
 import com.google.gwt.query.client.Function;
 import com.google.gwt.query.client.GQuery;
 import com.google.gwt.query.client.GQuery.Offset;
@@ -34,12 +44,17 @@ import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.web.bindery.event.shared.EventBus;
+import com.google.web.bindery.event.shared.HandlerRegistration;
+import com.google.web.bindery.event.shared.HandlerRegistrations;
+import com.google.web.bindery.event.shared.SimpleEventBus;
 
-import com.arcbees.gquery.tooltip.client.TooltipOptions.TooltipPlacement;
-import com.arcbees.gquery.tooltip.client.TooltipOptions.TooltipTrigger;
-import com.arcbees.gquery.tooltip.client.TooltipResources.TooltipStyle;
+import static com.arcbees.gquery.tooltip.client.Tooltip.Tooltip;
+import static com.arcbees.gquery.tooltip.client.Tooltip.getImpl;
+import static com.google.gwt.query.client.GQuery.$;
+import static com.google.gwt.query.client.GQuery.document;
 
-public class TooltipImpl {
+public class TooltipImpl implements HasHandlers {
     public static interface DefaultTemplate extends SafeHtmlTemplates {
         public DefaultTemplate template = GWT.create(DefaultTemplate.class);
 
@@ -188,6 +203,8 @@ public class TooltipImpl {
         impl.toggle();
     }
 
+    private final EventBus eventBus;
+
     private GQuery $element;
     private GQuery $tip;
     private TooltipOptions delegationOptions;
@@ -197,7 +214,9 @@ public class TooltipImpl {
     private Timer timer;
     private TooltipStyle style;
     private IsWidget widget;
-    private Function autocloseFunction;
+    private Function autoCloseFunction;
+    private HandlerRegistration allHandlerRegistration;
+
 
     public TooltipImpl(Element element, TooltipOptions options) {
         this(element, options, getDefaultResources());
@@ -207,12 +226,14 @@ public class TooltipImpl {
         this.$element = $(element);
         this.options = getOptions(options);
         this.style = resources.css();
-        this.autocloseFunction = new Function() {
+        this.autoCloseFunction = new Function() {
             @Override
             public boolean f(Event e) {
                 return onDocumentClick(e);
             }
         };
+        eventBus = new SimpleEventBus();
+
         init();
     }
 
@@ -222,6 +243,10 @@ public class TooltipImpl {
 
         if (options.getSelector() != null) {
             $(options.getSelector(), $element.get(0)).as(Tooltip).destroy();
+        }
+
+        if (allHandlerRegistration != null) {
+            allHandlerRegistration.removeHandler();
         }
     }
 
@@ -236,6 +261,8 @@ public class TooltipImpl {
     public void hide() {
         GQuery tooltip = getTip();
 
+        BeforeHideTooltipEvent.fire(tooltip, $element, this);
+
         tooltip.removeClass(style.in());
 
         if (options.isAnimation()) {
@@ -249,7 +276,9 @@ public class TooltipImpl {
             detach();
         }
 
-        $(document).unbind("click", autocloseFunction);
+        $(document).unbind("click", autoCloseFunction);
+
+        HideTooltipEvent.fire(tooltip, $element, this);
     }
 
     public void show() {
@@ -281,9 +310,15 @@ public class TooltipImpl {
             tooltip.appendTo($(container));
         }
 
+        BeforeSetTooltipContentEvent.fire(tooltip, $element, this);
+
         setContent();
 
+        BeforeShowTooltipEvent.fire(tooltip, $element, this);
+
         showTooltip();
+
+        ShowTooltipEvent.fire(tooltip, $element, this);
     }
 
     public void toggle() {
@@ -300,6 +335,11 @@ public class TooltipImpl {
 
     public TooltipOptions getOptions() {
         return options;
+    }
+
+    @Override
+    public void fireEvent(GwtEvent<?> gwtEvent) {
+        eventBus.fireEventFromSource(gwtEvent, this);
     }
 
     private void showTooltip() {
@@ -363,7 +403,7 @@ public class TooltipImpl {
             $(document).delay(1, new Function() {
                 @Override
                 public void f() {
-                    $(document).click(autocloseFunction);
+                    $(document).click(autoCloseFunction);
                 }
             });
         }
@@ -599,6 +639,29 @@ public class TooltipImpl {
                     return true;
                 }
             });
+        }
+
+        addHandlers();
+    }
+
+    private void addHandlers() {
+        List<HandlerRegistration> handlerRegistrations = new ArrayList<>();
+
+        addHandlersList(options.getBeforeHideTooltipEventHandlers(), BeforeHideTooltipEvent.TYPE, handlerRegistrations);
+        addHandlersList(options.getHideTooltipEventHandlers(), HideTooltipEvent.TYPE, handlerRegistrations);
+        addHandlersList(options.getBeforeShowTooltipEventHandlers(), BeforeShowTooltipEvent.TYPE, handlerRegistrations);
+        addHandlersList(options.getShowTooltipEventHandlers(), ShowTooltipEvent.TYPE, handlerRegistrations);
+        addHandlersList(options.getBeforeSetTooltipContentEventHandlers(), BeforeSetTooltipContentEvent.TYPE,
+                handlerRegistrations);
+
+        allHandlerRegistration = HandlerRegistrations.compose(handlerRegistrations.toArray(
+                new HandlerRegistration[handlerRegistrations.size()]));
+    }
+
+    private <T extends EventHandler> void addHandlersList(List<T> handlers, Type<T> type,
+            List<HandlerRegistration> handlerRegistrations) {
+        for (T handler : handlers) {
+            handlerRegistrations.add(eventBus.addHandler(type, handler));
         }
     }
 

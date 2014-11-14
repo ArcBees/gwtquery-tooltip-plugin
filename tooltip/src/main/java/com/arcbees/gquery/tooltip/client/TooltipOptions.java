@@ -16,6 +16,14 @@
 
 package com.arcbees.gquery.tooltip.client;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.arcbees.gquery.tooltip.client.event.BeforeHideTooltipEventHandler;
+import com.arcbees.gquery.tooltip.client.event.BeforeSetTooltipContentEventHandler;
+import com.arcbees.gquery.tooltip.client.event.BeforeShowTooltipEventHandler;
+import com.arcbees.gquery.tooltip.client.event.HideTooltipEventHandler;
+import com.arcbees.gquery.tooltip.client.event.ShowTooltipEventHandler;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.query.client.GQuery;
 import com.google.gwt.safehtml.shared.SafeHtml;
@@ -167,8 +175,18 @@ public class TooltipOptions {
     private Widget contentWidget;
     private TooltipWidgetContentProvider widgetContentProvider;
     private Boolean alwaysVisible;
+    private List<BeforeHideTooltipEventHandler> beforeHideTooltipEventHandlers;
+    private List<HideTooltipEventHandler> hideTooltipEventHandlers;
+    private List<BeforeShowTooltipEventHandler> beforeShowTooltipEventHandlers;
+    private List<ShowTooltipEventHandler> showTooltipEventHandlers;
+    private List<BeforeSetTooltipContentEventHandler> beforeSetTooltipContentEventHandlers;
 
     public TooltipOptions() {
+        beforeHideTooltipEventHandlers = new ArrayList<>();
+        showTooltipEventHandlers = new ArrayList<>();
+        beforeShowTooltipEventHandlers = new ArrayList<>();
+        hideTooltipEventHandlers = new ArrayList<>();
+        beforeSetTooltipContentEventHandlers = new ArrayList<>();
     }
 
     TooltipOptions(TooltipOptions options) {
@@ -190,6 +208,11 @@ public class TooltipOptions {
             offsetProvider = options.getOffsetProvider();
             contentWidget = options.getWidget();
             widgetContentProvider = options.getWidgetContentProvider();
+            beforeHideTooltipEventHandlers = new ArrayList<>(options.getBeforeHideTooltipEventHandlers());
+            showTooltipEventHandlers = new ArrayList<>(options.getShowTooltipEventHandlers());
+            beforeShowTooltipEventHandlers = new ArrayList<>(options.getBeforeShowTooltipEventHandlers());
+            hideTooltipEventHandlers = new ArrayList<>(options.getHideTooltipEventHandlers());
+            beforeSetTooltipContentEventHandlers = new ArrayList<>(options.getBeforeSetTooltipContentEventHandlers());
         }
     }
 
@@ -267,6 +290,26 @@ public class TooltipOptions {
 
     public TooltipWidgetContentProvider getWidgetContentProvider() {
         return widgetContentProvider;
+    }
+
+    public List<BeforeHideTooltipEventHandler> getBeforeHideTooltipEventHandlers() {
+        return beforeHideTooltipEventHandlers;
+    }
+
+    public List<HideTooltipEventHandler> getHideTooltipEventHandlers() {
+        return hideTooltipEventHandlers;
+    }
+
+    public List<BeforeShowTooltipEventHandler> getBeforeShowTooltipEventHandlers() {
+        return beforeShowTooltipEventHandlers;
+    }
+
+    public List<ShowTooltipEventHandler> getShowTooltipEventHandlers() {
+        return showTooltipEventHandlers;
+    }
+
+    public List<BeforeSetTooltipContentEventHandler> getBeforeSetTooltipContentEventHandlers() {
+        return beforeSetTooltipContentEventHandlers;
     }
 
     /**
@@ -494,6 +537,56 @@ public class TooltipOptions {
      */
     public TooltipOptions withTrigger(TooltipTrigger trigger) {
         this.trigger = trigger;
+        return this;
+    }
+
+    /**
+     * Add a {@link BeforeHideTooltipEventHandler}
+     * <p>
+     * This event handler will be called before to hidde the tooltip.
+     */
+    public TooltipOptions withBeforeHideTooltipEventHandler(BeforeHideTooltipEventHandler handler) {
+        beforeHideTooltipEventHandlers.add(handler);
+        return this;
+    }
+
+    /**
+     * Add a {@link HideTooltipEventHandler}
+     * <p>
+     * This event handler will be called once the tooltip is hidden.
+     */
+    public TooltipOptions withHideTooltipEventHandler(HideTooltipEventHandler handler) {
+        hideTooltipEventHandlers.add(handler);
+        return this;
+    }
+
+    /**
+     * Add a {@link BeforeShowTooltipEventHandler}
+     * <p>
+     * This event handler will be called before to show the tooltip on the screen.
+     */
+    public TooltipOptions withBeforeShowTooltipEventHandler(BeforeShowTooltipEventHandler handler) {
+        beforeShowTooltipEventHandlers.add(handler);
+        return this;
+    }
+
+    /**
+     * Add a {@link ShowTooltipEventHandler}
+     * <p>
+     * This event handler will be called when the tooltip is visible on the screen.
+     */
+    public TooltipOptions withShowTooltipEventHandler(ShowTooltipEventHandler handler) {
+        showTooltipEventHandlers.add(handler);
+        return this;
+    }
+
+    /**
+     * Add a {@link BeforeSetTooltipContentEventHandler}.
+     * <p>
+     * This event handler will be called before the tooltip content is set when the tooltip is showing.
+     */
+    public TooltipOptions withBeforeSetTooltipContentEventHandler(BeforeSetTooltipContentEventHandler handler) {
+        beforeSetTooltipContentEventHandlers.add(handler);
         return this;
     }
 
