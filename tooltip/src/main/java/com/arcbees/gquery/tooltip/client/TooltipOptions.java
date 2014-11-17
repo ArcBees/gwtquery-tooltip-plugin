@@ -543,7 +543,7 @@ public class TooltipOptions {
     /**
      * Add a {@link BeforeHideTooltipEventHandler}
      * <p>
-     * This event handler will be called before to hidde the tooltip.
+     * This event handler will be called before to hide the tooltip.
      */
     public TooltipOptions withBeforeHideTooltipEventHandler(BeforeHideTooltipEventHandler handler) {
         beforeHideTooltipEventHandlers.add(handler);

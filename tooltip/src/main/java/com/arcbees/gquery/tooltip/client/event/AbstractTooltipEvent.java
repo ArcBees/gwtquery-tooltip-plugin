@@ -37,7 +37,7 @@ public abstract class AbstractTooltipEvent<T extends EventHandler> extends GwtEv
     }
 
     /**
-     * Return the {@see GQuery} object of the element that triggers the tooltip.
+     * Return the {@see GQuery} object of the element triggering the tooltip.
      */
     public GQuery getTooltipTrigger() {
         return tooltipTrigger;
