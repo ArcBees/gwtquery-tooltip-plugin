@@ -73,6 +73,7 @@ public class TooltipOptions {
     private static TooltipOffsetProvider globalOffsetProvider;
     private static Widget globalWidget;
     private static boolean globalAlwaysVisible;
+    private static String globalClosingPartner;
 
     public static void setGlobalAnimation(boolean globalAnimation) {
         TooltipOptions.globalAnimation = globalAnimation;
@@ -146,6 +147,10 @@ public class TooltipOptions {
         TooltipOptions.globalWidget = globalWidget.asWidget();
     }
 
+    public static void setGlobalClosingPartner(String selector) {
+        TooltipOptions.globalClosingPartner = selector;
+    }
+
     static {
         //set default options globally
         globalAnimation = true;
@@ -180,6 +185,7 @@ public class TooltipOptions {
     private List<BeforeShowTooltipEventHandler> beforeShowTooltipEventHandlers;
     private List<ShowTooltipEventHandler> showTooltipEventHandlers;
     private List<BeforeSetTooltipContentEventHandler> beforeSetTooltipContentEventHandlers;
+    private String closingPartner;
 
     public TooltipOptions() {
         beforeHideTooltipEventHandlers = new ArrayList<>();
@@ -213,6 +219,7 @@ public class TooltipOptions {
             beforeShowTooltipEventHandlers = new ArrayList<>(options.getBeforeShowTooltipEventHandlers());
             hideTooltipEventHandlers = new ArrayList<>(options.getHideTooltipEventHandlers());
             beforeSetTooltipContentEventHandlers = new ArrayList<>(options.getBeforeSetTooltipContentEventHandlers());
+            closingPartner = options.getClosingPartner();
         }
     }
 
@@ -226,6 +233,10 @@ public class TooltipOptions {
 
     public TooltipContentProvider getContentProvider() {
         return getFirstOr(contentProvider, globalContentProvider);
+    }
+
+    public String getClosingPartner() {
+        return getFirstOr(closingPartner, globalClosingPartner);
     }
 
     public int getDelayHide() {
@@ -545,7 +556,7 @@ public class TooltipOptions {
      * <p>
      * This event handler will be called before to hide the tooltip.
      */
-    public TooltipOptions withBeforeHideTooltipEventHandler(BeforeHideTooltipEventHandler handler) {
+    public TooltipOptions addBeforeHideTooltipEventHandler(BeforeHideTooltipEventHandler handler) {
         beforeHideTooltipEventHandlers.add(handler);
         return this;
     }
@@ -555,7 +566,7 @@ public class TooltipOptions {
      * <p>
      * This event handler will be called once the tooltip is hidden.
      */
-    public TooltipOptions withHideTooltipEventHandler(HideTooltipEventHandler handler) {
+    public TooltipOptions addHideTooltipEventHandler(HideTooltipEventHandler handler) {
         hideTooltipEventHandlers.add(handler);
         return this;
     }
@@ -565,7 +576,7 @@ public class TooltipOptions {
      * <p>
      * This event handler will be called before to show the tooltip on the screen.
      */
-    public TooltipOptions withBeforeShowTooltipEventHandler(BeforeShowTooltipEventHandler handler) {
+    public TooltipOptions addBeforeShowTooltipEventHandler(BeforeShowTooltipEventHandler handler) {
         beforeShowTooltipEventHandlers.add(handler);
         return this;
     }
@@ -575,7 +586,7 @@ public class TooltipOptions {
      * <p>
      * This event handler will be called when the tooltip is visible on the screen.
      */
-    public TooltipOptions withShowTooltipEventHandler(ShowTooltipEventHandler handler) {
+    public TooltipOptions addShowTooltipEventHandler(ShowTooltipEventHandler handler) {
         showTooltipEventHandlers.add(handler);
         return this;
     }
@@ -585,8 +596,17 @@ public class TooltipOptions {
      * <p>
      * This event handler will be called before the tooltip content is set when the tooltip is showing.
      */
-    public TooltipOptions withBeforeSetTooltipContentEventHandler(BeforeSetTooltipContentEventHandler handler) {
+    public TooltipOptions addBeforeSetTooltipContentEventHandler(BeforeSetTooltipContentEventHandler handler) {
         beforeSetTooltipContentEventHandlers.add(handler);
+        return this;
+    }
+
+    /**
+     * Specify, by a css selector, the elements inside the tooltip that close the tooltip when the user clicks on.
+     */
+    public TooltipOptions withClosingPartner(String selector) {
+        closingPartner = selector;
+
         return this;
     }
 
