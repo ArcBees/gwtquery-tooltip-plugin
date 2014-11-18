@@ -74,6 +74,11 @@ public class TooltipOptions {
     private static Widget globalWidget;
     private static boolean globalAlwaysVisible;
     private static String globalClosingPartner;
+    private static List<BeforeHideTooltipEventHandler> globalBeforeHideTooltipEventHandlers;
+    private static List<HideTooltipEventHandler> globalHideTooltipEventHandlers;
+    private static List<BeforeShowTooltipEventHandler> globalBeforeShowTooltipEventHandlers;
+    private static List<ShowTooltipEventHandler> globalShowTooltipEventHandlers;
+    private static List<BeforeSetTooltipContentEventHandler> globalBeforeSetTooltipContentEventHandlers;
 
     public static void setGlobalAnimation(boolean globalAnimation) {
         TooltipOptions.globalAnimation = globalAnimation;
@@ -151,6 +156,26 @@ public class TooltipOptions {
         TooltipOptions.globalClosingPartner = selector;
     }
 
+    public static void addGlobalBeforeHideTooltipEventHandler(BeforeHideTooltipEventHandler handler) {
+        globalBeforeHideTooltipEventHandlers.add(handler);
+    }
+
+    public static void addGlobalHideTooltipEventHandler(HideTooltipEventHandler handler) {
+        globalHideTooltipEventHandlers.add(handler);
+    }
+
+    public static void addGlobalBeforeShowTooltipEventHandler(BeforeShowTooltipEventHandler handler) {
+        globalBeforeShowTooltipEventHandlers.add(handler);
+    }
+
+    public static void addGlobalShowTooltipEventHandler(ShowTooltipEventHandler handler) {
+        globalShowTooltipEventHandlers.add(handler);
+    }
+
+    public static void addGlobalBeforeSetTooltipContentEventHandler(BeforeSetTooltipContentEventHandler handler) {
+        globalBeforeSetTooltipContentEventHandlers.add(handler);
+    }
+
     static {
         //set default options globally
         globalAnimation = true;
@@ -159,6 +184,11 @@ public class TooltipOptions {
         globalDelayShow = globalDelayHide = 0;
         globalContainer = "body";
         globalAlwaysVisible = true;
+        globalBeforeHideTooltipEventHandlers = new ArrayList<>();
+        globalShowTooltipEventHandlers = new ArrayList<>();
+        globalBeforeShowTooltipEventHandlers = new ArrayList<>();
+        globalHideTooltipEventHandlers = new ArrayList<>();
+        globalBeforeSetTooltipContentEventHandlers = new ArrayList<>();
     }
 
     private Boolean animation;
@@ -304,23 +334,33 @@ public class TooltipOptions {
     }
 
     public List<BeforeHideTooltipEventHandler> getBeforeHideTooltipEventHandlers() {
-        return beforeHideTooltipEventHandlers;
+        List<BeforeHideTooltipEventHandler> handlers = new ArrayList<>(globalBeforeHideTooltipEventHandlers);
+        handlers.addAll(beforeHideTooltipEventHandlers);
+        return handlers;
     }
 
     public List<HideTooltipEventHandler> getHideTooltipEventHandlers() {
-        return hideTooltipEventHandlers;
+        List<HideTooltipEventHandler> handlers = new ArrayList<>(globalHideTooltipEventHandlers);
+        handlers.addAll(hideTooltipEventHandlers);
+        return handlers;
     }
 
     public List<BeforeShowTooltipEventHandler> getBeforeShowTooltipEventHandlers() {
-        return beforeShowTooltipEventHandlers;
+        List<BeforeShowTooltipEventHandler> handlers = new ArrayList<>(globalBeforeShowTooltipEventHandlers);
+        handlers.addAll(beforeShowTooltipEventHandlers);
+        return handlers;
     }
 
     public List<ShowTooltipEventHandler> getShowTooltipEventHandlers() {
-        return showTooltipEventHandlers;
+        List<ShowTooltipEventHandler> handlers = new ArrayList<>(globalShowTooltipEventHandlers);
+        handlers.addAll(showTooltipEventHandlers);
+        return handlers;
     }
 
     public List<BeforeSetTooltipContentEventHandler> getBeforeSetTooltipContentEventHandlers() {
-        return beforeSetTooltipContentEventHandlers;
+        List<BeforeSetTooltipContentEventHandler> handlers = new ArrayList<>(globalBeforeSetTooltipContentEventHandlers);
+        handlers.addAll(beforeSetTooltipContentEventHandlers);
+        return handlers;
     }
 
     /**
