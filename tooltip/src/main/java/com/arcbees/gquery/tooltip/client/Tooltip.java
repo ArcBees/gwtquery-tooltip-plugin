@@ -48,7 +48,7 @@ public class Tooltip extends GQuery {
 
             Map<String, TooltipImpl> impls = $e.data(TOOLTIP_DATA_KEY);
             if (impls == null) {
-                impls = new HashMap<String, TooltipImpl>();
+                impls = new HashMap<>();
                 $e.data(TOOLTIP_DATA_KEY, impls);
             }
 
