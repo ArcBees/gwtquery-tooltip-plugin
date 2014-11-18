@@ -51,6 +51,7 @@ import com.google.web.bindery.event.shared.SimpleEventBus;
 
 import static com.arcbees.gquery.tooltip.client.Tooltip.Tooltip;
 import static com.arcbees.gquery.tooltip.client.Tooltip.getImpl;
+import static com.google.gwt.dom.client.BrowserEvents.CLICK;
 import static com.google.gwt.query.client.GQuery.$;
 import static com.google.gwt.query.client.GQuery.document;
 
@@ -276,7 +277,10 @@ public class TooltipImpl implements HasHandlers {
             detach();
         }
 
-        $(document).unbind("click", autoCloseFunction);
+        $(document).unbind(CLICK, autoCloseFunction);
+        if (options.getClosingPartner() != null) {
+            tooltip.off(CLICK, options.getClosingPartner());
+        }
 
         HideTooltipEvent.fire(tooltip, $element, this);
     }
@@ -404,6 +408,15 @@ public class TooltipImpl implements HasHandlers {
                 @Override
                 public void f() {
                     $(document).click(autoCloseFunction);
+                }
+            });
+        }
+
+        if (options.getClosingPartner() != null) {
+            tooltip.on(CLICK, options.getClosingPartner(), new Function() {
+                @Override
+                public void f() {
+                    hide();
                 }
             });
         }
@@ -615,7 +628,7 @@ public class TooltipImpl implements HasHandlers {
         }
 
         if (options.getTrigger() == TooltipTrigger.CLICK) {
-            bind("click", new Function() {
+            bind(CLICK, new Function() {
                 @Override
                 public boolean f(Event e) {
                     toggle(e, delegationOptions);
