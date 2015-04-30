@@ -16,8 +16,11 @@
 
 package com.arcbees.gquery.tooltip.client;
 
-import java.util.ArrayList;
-import java.util.List;
+import static com.arcbees.gquery.tooltip.client.Tooltip.Tooltip;
+import static com.arcbees.gquery.tooltip.client.Tooltip.getImpl;
+import static com.google.gwt.dom.client.BrowserEvents.CLICK;
+import static com.google.gwt.query.client.GQuery.$;
+import static com.google.gwt.query.client.GQuery.document;
 
 import com.arcbees.gquery.tooltip.client.TooltipOptions.TooltipPlacement;
 import com.arcbees.gquery.tooltip.client.TooltipOptions.TooltipTrigger;
@@ -49,11 +52,8 @@ import com.google.web.bindery.event.shared.HandlerRegistration;
 import com.google.web.bindery.event.shared.HandlerRegistrations;
 import com.google.web.bindery.event.shared.SimpleEventBus;
 
-import static com.arcbees.gquery.tooltip.client.Tooltip.Tooltip;
-import static com.arcbees.gquery.tooltip.client.Tooltip.getImpl;
-import static com.google.gwt.dom.client.BrowserEvents.CLICK;
-import static com.google.gwt.query.client.GQuery.$;
-import static com.google.gwt.query.client.GQuery.document;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TooltipImpl implements HasHandlers {
     public static interface DefaultTemplate extends SafeHtmlTemplates {
@@ -293,7 +293,8 @@ public class TooltipImpl implements HasHandlers {
         }
 
         assignWidget();
-        if (!enabled || noContentInTooltip()) {
+
+        if (noContentInTooltip()) {
             return;
         }
 
@@ -319,6 +320,10 @@ public class TooltipImpl implements HasHandlers {
         setContent();
 
         BeforeShowTooltipEvent.fire(tooltip, $element, this);
+
+        if (!enabled) {
+            return;
+        }
 
         showTooltip();
 
@@ -468,7 +473,7 @@ public class TooltipImpl implements HasHandlers {
         if ($e.parents("." + style.tooltip()).length() == 0) {
             hide();
         }
-        return false;
+        return true;
     }
 
     private void cancelTimer() {
